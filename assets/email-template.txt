@@ -1,0 +1,49 @@
+Subject: Your Archergate License SDK
+
+---
+
+ARCHERGATE
+
+────────────────────────────────────────────
+
+You're in.
+
+Here are your download links for {{PLUGIN_NAME}}. Pick your platform, extract, and link the static library into your project. The header file is included.
+
+Windows (MSVC)
+https://github.com/lailaarcher/archergate/releases/download/v0.1.0/archergate-license-v0.1.0-windows-x64.tar.gz
+
+macOS (Intel + Apple Silicon)
+https://github.com/lailaarcher/archergate/releases/download/v0.1.0/archergate-license-v0.1.0-macos-universal.tar.gz
+
+Linux (x86_64)
+https://github.com/lailaarcher/archergate/releases/download/v0.1.0/archergate-license-v0.1.0-linux-x64.tar.gz
+
+Or via Rust:
+cargo add archergate-license
+
+────────────────────────────────────────────
+
+Three lines to validate a license:
+
+  #include "archergate_license.h"
+  AgLicenseClient* client = ag_license_new("your-api-key", "{{PLUGIN_ID}}");
+  ag_license_validate(client, licenseKey);
+
+Full docs and source:
+https://github.com/lailaarcher/archergate
+
+────────────────────────────────────────────
+
+While you're here: what is the one thing about licensing that has burned you before? Hit reply and tell us. That is how we decide what to build next.
+
+ARCHERGATE.IO ->
+https://archergate.io
+
+Thanks for your support,
+Archergate Team
+
+────────────────────────────────────────────
+
+Archergate
+archergate.io | 447 Sutter St, Ste 506 1461, San Francisco CA 94108

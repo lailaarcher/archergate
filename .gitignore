@@ -1,0 +1,9 @@
+target/
+*.db
+.env
+release-artifacts/
+*.swp
+.DS_Store
+Thumbs.db
+node_modules/
+/tmp/

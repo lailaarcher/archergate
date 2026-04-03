@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archergate — License SDK Beta</title>
+    <meta name="description" content="Machine-bound software licensing for indie developers. Protect desktop apps, creative tools, game assets, and plugins. Free and open source.">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #08080C;
+            --text: #DEE1E8;
+            --text2: #807E78;
+            --text3: #6A6862;
+            --teal: #6A9ABF;
+            --border: rgba(255,255,255,0.06);
+            --serif: "DM Serif Display", Georgia, serif;
+            --body: "Instrument Serif", Georgia, serif;
+            --mono: "IBM Plex Mono", monospace;
+            --sans: "Space Grotesk", sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--body);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .content { position: relative; z-index: 1; }
+
+        a { color: var(--teal); text-decoration: none; transition: opacity 0.3s; }
+        a:hover { opacity: 0.8; }
+
+        /* Back nav */
+        .back-nav {
+            padding: 24px 64px;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+        }
+        .back-nav a { color: var(--text2); border-bottom: 1px solid transparent; }
+        .back-nav a:hover { color: var(--teal); border-bottom-color: var(--teal); }
+
+        /* Hero — two column */
+        .hero-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 70vh;
+            border-top: 1px solid var(--border);
+        }
+
+        .hero-left {
+            padding: 80px 64px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-left .eyebrow {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text3);
+            margin-bottom: 24px;
+        }
+
+        .hero-left h1 {
+            font-family: var(--serif);
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 24px;
+        }
+
+        .hero-left h1 em {
+            font-style: italic;
+            background: linear-gradient(135deg, var(--teal), var(--text));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-left p {
+            color: var(--text2);
+            font-size: 1.1rem;
+            max-width: 440px;
+            line-height: 1.7;
+        }
+
+        .beta-badge {
+            display: inline-block;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--bg);
+            background: var(--teal);
+            padding: 4px 10px;
+            border-radius: 3px;
+            margin-bottom: 20px;
+        }
+
+        /* Form */
+        .hero-right {
+            padding: 80px 64px;
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .sdk-form { max-width: 400px; }
+
+        .sdk-form input, .sdk-form select {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.3s;
+            -webkit-appearance: none;
+        }
+
+        .sdk-form input::placeholder { color: var(--text3); }
+        .sdk-form input:focus, .sdk-form select:focus { border-color: var(--teal); }
+
+        .sdk-form select {
+            color: var(--text3);
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%236A6862'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+        .sdk-form select.selected { color: var(--text); }
+
+        .sdk-form button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 4px;
+            background: var(--teal);
+            color: var(--bg);
+            border: none;
+            border-radius: 4px;
+            font-family: var(--mono);
+            font-size: 0.88rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        .sdk-form button:hover { opacity: 0.85; }
+        .sdk-form button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .form-note {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--text3);
+            margin-top: 14px;
+            line-height: 1.5;
+        }
+
+        .form-success {
+            display: none;
+            padding: 24px;
+            border: 1px solid rgba(106,154,191,0.3);
+            border-radius: 4px;
+            background: rgba(106,154,191,0.05);
+        }
+        .form-success h3 {
+            font-family: var(--serif);
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        .form-success p {
+            color: var(--text2);
+            font-size: 0.95rem;
+        }
+
+        /* Stack section */
+        .stack-section {
+            padding: 80px 64px;
+            border-top: 1px solid var(--border);
+        }
+
+        .stack-eyebrow {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text3);
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .stack-title {
+            font-family: var(--serif);
+            font-size: 2.2rem;
+            font-weight: 400;
+            margin-bottom: 48px;
+        }
+        .stack-title em {
+            font-style: italic;
+            background: linear-gradient(135deg, var(--teal), var(--text));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .stack-item-title {
+            font-family: var(--serif);
+            font-size: 1.15rem;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .stack-item-text {
+            color: var(--text3);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Code section */
+        .code-section {
+            padding: 80px 64px;
+            border-top: 1px solid var(--border);
+        }
+
+        .code-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .code-card-label {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+        }
+
+        .code-card {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 20px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text2);
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .code-card .kw { color: var(--teal); }
+        .code-card .str { color: #98C379; }
+
+        /* Built for row */
+        .built-for {
+            padding: 40px 64px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .built-for .label {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text3);
+        }
+
+        .built-for .tags {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .built-for .tag {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text2);
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+        }
+
+        /* FAQ */
+        .faq-section {
+            padding: 80px 64px;
+            border-top: 1px solid var(--border);
+        }
+
+        .faq-title {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 48px;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px 60px;
+        }
+
+        .faq-item h4 {
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .faq-item p {
+            color: var(--text3);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 64px;
+            border-top: 1px solid var(--border);
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text3);
+        }
+
+        .foot-logo {
+            font-family: var(--serif);
+            font-size: 1rem;
+            color: var(--text);
+        }
+        .foot-logo em { color: var(--teal); }
+
+        .foot nav a {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text3);
+            margin-left: 24px;
+        }
+        .foot nav a:hover { color: var(--teal); }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero-split { grid-template-columns: 1fr; }
+            .hero-right { border-left: none; border-top: 1px solid var(--border); padding: 48px 24px; }
+            .hero-left { padding: 48px 24px; }
+            .stack-section, .code-section, .faq-section { padding: 48px 24px; }
+            .stack-grid, .code-grid { grid-template-columns: 1fr; }
+            .faq-grid { grid-template-columns: 1fr; }
+            .built-for { padding: 24px; flex-direction: column; align-items: flex-start; }
+            .foot { flex-direction: column; gap: 16px; text-align: center; padding: 24px; }
+            .foot nav a { margin: 0 12px; }
+            .back-nav { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="field"></canvas>
+
+    <div class="content">
+        <div class="back-nav">
+            <a href="https://archergate.io">&larr; Archergate</a>
+        </div>
+
+        <!-- Hero -->
+        <section class="hero-split">
+            <div class="hero-left">
+                <span class="beta-badge">Open Beta</span>
+                <span class="eyebrow">License SDK</span>
+                <h1>Machine-bound licensing for <em>indie software.</em></h1>
+                <p>Hardware-locked keys. 30-day offline validation. 14-day trials. Cryptographic tamper detection. Integrates in 30 minutes. MIT licensed.</p>
+            </div>
+            <div class="hero-right">
+                <div class="sdk-form" id="form-container">
+                    <form id="sdk-form" onsubmit="return submitSDK(event)">
+                        <input type="text" id="sdk-name" placeholder="Name" required>
+                        <input type="email" id="sdk-email" placeholder="Email" required>
+                        <input type="text" id="sdk-app" placeholder="App or plugin name" required>
+                        <input type="text" id="sdk-appid" placeholder="com.yourname.app" required>
+                        <select id="sdk-type" onchange="this.classList.toggle('selected', this.value !== '')">
+                            <option value="">Software type</option>
+                            <option value="vst-plugin">VST / AU / AAX Plugin</option>
+                            <option value="unity-asset">Unity Asset</option>
+                            <option value="blender-addon">Blender Addon</option>
+                            <option value="desktop-app">Desktop App (Electron / Tauri / Native)</option>
+                            <option value="adobe-plugin">Adobe Plugin (Premiere / AE / PS)</option>
+                            <option value="game-mod">Game Mod / Tool</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <button type="submit" id="sdk-btn">Get the SDK</button>
+                    </form>
+                    <p class="form-note">Download links sent to your email. MIT licensed. No lock-in.</p>
+                </div>
+                <div class="form-success" id="form-success">
+                    <h3>Check your email.</h3>
+                    <p>Download links and integration guide sent. If nothing shows up in 2 minutes, check spam.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Built for -->
+        <div class="built-for">
+            <span class="label">Built for</span>
+            <div class="tags">
+                <span class="tag">DAW Plugins</span>
+                <span class="tag">Unity Assets</span>
+                <span class="tag">Blender Addons</span>
+                <span class="tag">Desktop Apps</span>
+                <span class="tag">Creative Tools</span>
+                <span class="tag">Game Mods</span>
+            </div>
+        </div>
+
+        <!-- What's in the SDK -->
+        <section class="stack-section">
+            <span class="stack-eyebrow">What's inside</span>
+            <h2 class="stack-title">Everything between your binary and a <em>cracked copy.</em></h2>
+            <div class="stack-grid">
+                <div class="stack-item">
+                    <h3 class="stack-item-title">Machine binding</h3>
+                    <p class="stack-item-text">SHA-256 fingerprint from CPU identity and OS install ID. License stays on the machine it was activated on.</p>
+                </div>
+                <div class="stack-item">
+                    <h3 class="stack-item-title">Offline validation</h3>
+                    <p class="stack-item-text">Validate once, work offline for 30 days. HMAC-signed cache. Touring musicians, remote studios, air-gapped labs.</p>
+                </div>
+                <div class="stack-item">
+                    <h3 class="stack-item-title">14-day trials</h3>
+                    <p class="stack-item-text">Built into the SDK. No server, no signup, no tracking. Users try it, then decide.</p>
+                </div>
+                <div class="stack-item">
+                    <h3 class="stack-item-title">Tamper detection</h3>
+                    <p class="stack-item-text">HMAC-signed cache. Validation receipts. Heartbeat counter. Three independent verification paths.</p>
+                </div>
+                <div class="stack-item">
+                    <h3 class="stack-item-title">Rust, C, C++</h3>
+                    <p class="stack-item-text">Native Rust SDK. C FFI with RAII wrapper. REST API for any other language. Static library, no runtime deps.</p>
+                </div>
+                <div class="stack-item">
+                    <h3 class="stack-item-title">Self-hosted server</h3>
+                    <p class="stack-item-text">Reference server included. Axum + SQLite. Run it yourself. Or use Archergate's hosted option when it ships.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code -->
+        <section class="code-section">
+            <span class="stack-eyebrow">Integration</span>
+            <h2 class="stack-title">Three lines. <em>Thirty minutes.</em></h2>
+            <div class="code-grid">
+                <div>
+                    <div class="code-card-label">Rust</div>
+                    <div class="code-card">
+<span class="kw">use</span> archergate_license::LicenseClient;
+
+<span class="kw">let</span> client = LicenseClient::new(
+    <span class="str">"your-api-key"</span>,
+    <span class="str">"com.you.app"</span>,
+);
+client.validate(<span class="str">"XXXX-XXXX"</span>)?;
+                    </div>
+                </div>
+                <div>
+                    <div class="code-card-label">C / C++</div>
+                    <div class="code-card">
+<span class="kw">#include</span> <span class="str">"archergate_license.h"</span>
+
+AgLicenseClient* c = ag_license_new(
+    <span class="str">"your-api-key"</span>,
+    <span class="str">"com.you.app"</span>
+);
+ag_license_validate(c, key);
+ag_license_free(c);
+                    </div>
+                </div>
+                <div>
+                    <div class="code-card-label">REST API (any language)</div>
+                    <div class="code-card">
+POST /validate
+{
+  <span class="str">"license_key"</span>: <span class="str">"XXXX"</span>,
+  <span class="str">"machine_fingerprint"</span>: <span class="str">"..."</span>,
+  <span class="str">"plugin_id"</span>: <span class="str">"com.you.app"</span>
+}
+
+<span class="kw">→</span> { <span class="str">"valid"</span>: <span class="kw">true</span> }
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq-section">
+            <h2 class="faq-title">Common questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h4>Is the SDK free?</h4>
+                    <p>Yes. MIT licensed, forever. We may charge for managed hosting later. The SDK and self-hosted server stay free.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>What languages are supported?</h4>
+                    <p>Rust natively. C and C++ via FFI. Any language via REST API (Python, C#, Go, JS). Static library links into your binary.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Can I run my own server?</h4>
+                    <p>Yes. Reference server ships with the SDK. Rust + SQLite. Deploy it on any $5 VPS. Modify it however you want.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>What data do you collect?</h4>
+                    <p>Self-hosted: nothing. Archergate cloud (future): license key, machine fingerprint, activation date. No analytics, no tracking.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>What about offline users?</h4>
+                    <p>One online validation, then 30 days offline. HMAC-signed local cache. No internet needed during that window.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>What if Archergate disappears?</h4>
+                    <p>The SDK is open source. Self-host, fork, or replace the server. Your licensing depends on your code, not ours.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="foot">
+            <span>&copy; 2026 Archergate San Francisco, California</span>
+            <nav>
+                <a href="https://github.com/lailaarcher/archergate">GitHub</a>
+                <a href="https://crates.io/crates/archergate-license">crates.io</a>
+                <a href="https://docs.rs/archergate-license">Docs</a>
+                <a href="mailto:hello@archergate.io">Contact</a>
+            </nav>
+            <span class="foot-logo">Archer<em>gate</em></span>
+        </footer>
+    </div>
+
+    <script>
+        // Archergate animated background
+        const canvas = document.getElementById('field');
+        const ctx = canvas.getContext('2d');
+        let W, H, mouse = {x: -1000, y: -1000}, stars = [], nodes = [], time = 0;
+
+        function resize() {
+            const dpr = Math.min(devicePixelRatio || 1, 2);
+            W = innerWidth; H = innerHeight;
+            canvas.width = W * dpr; canvas.height = H * dpr;
+            ctx.scale(dpr, dpr);
+        }
+
+        function init() {
+            stars = []; nodes = [];
+            const count = Math.floor((W * H) / 16000);
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * W, y: Math.random() * H,
+                    r: Math.random() * 1.2 + 0.3,
+                    phase: Math.random() * Math.PI * 2,
+                    speed: 0.005 + Math.random() * 0.01,
+                    dx: (Math.random() - 0.5) * 0.08,
+                    dy: (Math.random() - 0.5) * 0.08
+                });
+            }
+            for (let i = 0; i < 5; i++) {
+                nodes.push({
+                    x: Math.random() * W, y: Math.random() * H,
+                    r: 1.5 + Math.random() * 2,
+                    phase: Math.random() * Math.PI * 2,
+                    freq: 0.003 + Math.random() * 0.004,
+                    dx: (Math.random() - 0.5) * 0.2,
+                    dy: (Math.random() - 0.5) * 0.2
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            time++;
+
+            for (const s of stars) {
+                s.x += s.dx; s.y += s.dy;
+                s.phase += s.speed;
+                if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
+                if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
+
+                const dist = Math.hypot(s.x - mouse.x, s.y - mouse.y);
+                const glow = dist < 180 ? (1 - dist / 180) * 0.35 : 0;
+                const alpha = 0.12 + Math.sin(s.phase) * 0.07 + glow;
+
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(106,154,191,${alpha})`;
+                ctx.fill();
+            }
+
+            for (const n of nodes) {
+                n.x += n.dx; n.y += n.dy;
+                n.phase += n.freq;
+                if (n.x < 0 || n.x > W) n.dx *= -1;
+                if (n.y < 0 || n.y > H) n.dy *= -1;
+
+                const pulse = 0.15 + Math.sin(n.phase) * 0.08;
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(106,154,191,${pulse})`;
+                ctx.fill();
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        resize(); init(); draw();
+        addEventListener('resize', () => { resize(); init(); });
+        document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+        // Form submission
+        async function submitSDK(e) {
+            e.preventDefault();
+            const btn = document.getElementById('sdk-btn');
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+
+            const data = {
+                name: document.getElementById('sdk-name').value,
+                email: document.getElementById('sdk-email').value,
+                app_name: document.getElementById('sdk-app').value,
+                app_id: document.getElementById('sdk-appid').value,
+                software_type: document.getElementById('sdk-type').value,
+                source: 'sdk-beta'
+            };
+
+            try {
+                const resp = await fetch('/api/sdk-beta', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (resp.ok) {
+                    document.getElementById('form-container').querySelector('form').style.display = 'none';
+                    document.getElementById('form-container').querySelector('.form-note').style.display = 'none';
+                    document.getElementById('form-success').style.display = 'block';
+                } else {
+                    btn.textContent = 'Something went wrong. Try again.';
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                btn.textContent = 'Network error. Try again.';
+                btn.disabled = false;
+            }
+
+            return false;
+        }
+    </script>
+</body>
+</html>

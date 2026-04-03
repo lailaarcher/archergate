@@ -1,0 +1,35 @@
+[package]
+name = "archergate-license"
+version = "0.1.2"
+edition = "2021"
+license = "MIT"
+description = "License management SDK for indie software developers — desktop apps, creative tools, game assets, and plugins"
+authors = ["Archergate Contributors"]
+repository = "https://github.com/lailaarcher/archergate"
+homepage = "https://archergate.io/developers"
+documentation = "https://docs.rs/archergate-license"
+readme = "README.md"
+categories = ["authentication"]
+keywords = ["license", "software-protection", "copy-protection", "indie", "machine-binding"]
+
+[lib]
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+hmac = "0.12"
+hex = "0.4"
+base64 = "0.22"
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1"
+ureq = { version = "2", features = ["json"] }
+dirs = "5"
+sysinfo = "0.30"
+
+[target.'cfg(windows)'.dependencies]
+winreg = "0.52"
+
+[dev-dependencies]
+tempfile = "3"

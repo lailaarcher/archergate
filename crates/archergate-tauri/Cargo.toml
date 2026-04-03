@@ -1,0 +1,19 @@
+[package]
+name = "archergate-tauri"
+version.workspace = true
+edition.workspace = true
+description = "ARCHERGATE desktop app — Tauri shell"
+
+[dependencies]
+archergate-core = { path = "../archergate-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tokio-tungstenite = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+futures-util = "0.3"
+tauri = { version = "2", features = [] }
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
