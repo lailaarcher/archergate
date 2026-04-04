@@ -1,0 +1,31 @@
+{
+    "name": "@archergate/mcp-server",
+    "version": "0.1.0",
+    "description": "MCP server for Archergate License SDK. Lets AI coding assistants generate license-protected software automatically.",
+    "main": "index.js",
+    "type": "module",
+    "bin": {
+        "archergate-mcp": "./index.js"
+    },
+    "keywords": [
+        "mcp",
+        "model-context-protocol",
+        "licensing",
+        "copy-protection",
+        "ai-tools",
+        "claude",
+        "cursor",
+        "copilot",
+        "archergate"
+    ],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/lailaarcher/archergate"
+    },
+    "homepage": "https://archergate.io/sdk",
+    "author": "Archergate <hello@archergate.io>",
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.0.0"
+    }
+}
