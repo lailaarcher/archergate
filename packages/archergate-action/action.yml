@@ -1,0 +1,89 @@
+name: 'Archergate License Check'
+description: 'Verify your binary includes Archergate license protection before shipping. Catches unprotected releases.'
+author: 'Archergate <hello@archergate.io>'
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  binary:
+    description: 'Path to the compiled binary to check'
+    required: true
+  platform:
+    description: 'Target platform (windows, macos, linux)'
+    required: false
+    default: 'linux'
+  fail-on-missing:
+    description: 'Fail the build if license protection is not detected'
+    required: false
+    default: 'true'
+
+outputs:
+  protected:
+    description: 'Whether the binary contains Archergate license checking'
+    value: ${{ steps.check.outputs.protected }}
+  symbols-found:
+    description: 'Archergate symbols detected in the binary'
+    value: ${{ steps.check.outputs.symbols }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check for Archergate symbols
+      id: check
+      shell: bash
+      run: |
+        BINARY="${{ inputs.binary }}"
+        PLATFORM="${{ inputs.platform }}"
+
+        if [ ! -f "$BINARY" ]; then
+          echo "::error::Binary not found: $BINARY"
+          exit 1
+        fi
+
+        echo "Scanning $BINARY for Archergate license symbols..."
+
+        # Look for Archergate FFI symbols in the binary
+        SYMBOLS=""
+        FOUND=0
+
+        if [[ "$PLATFORM" == "windows" ]]; then
+          # Windows: check for exported symbols in .lib/.dll
+          if command -v dumpbin &> /dev/null; then
+            SYMBOLS=$(dumpbin /exports "$BINARY" 2>/dev/null | grep -i "ag_license" || true)
+          else
+            SYMBOLS=$(strings "$BINARY" 2>/dev/null | grep -i "ag_license\|archergate_license\|AgLicenseClient" || true)
+          fi
+        elif [[ "$PLATFORM" == "macos" ]]; then
+          SYMBOLS=$(nm "$BINARY" 2>/dev/null | grep -i "ag_license\|archergate_license" || true)
+          if [ -z "$SYMBOLS" ]; then
+            SYMBOLS=$(strings "$BINARY" 2>/dev/null | grep -i "ag_license\|archergate_license\|AgLicenseClient" || true)
+          fi
+        else
+          SYMBOLS=$(nm "$BINARY" 2>/dev/null | grep -i "ag_license\|archergate_license" || true)
+          if [ -z "$SYMBOLS" ]; then
+            SYMBOLS=$(strings "$BINARY" 2>/dev/null | grep -i "ag_license\|archergate_license\|AgLicenseClient" || true)
+          fi
+        fi
+
+        if [ -n "$SYMBOLS" ]; then
+          FOUND=1
+          echo "protected=true" >> $GITHUB_OUTPUT
+          echo "symbols<<EOF" >> $GITHUB_OUTPUT
+          echo "$SYMBOLS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "::notice::Archergate license protection detected in $BINARY"
+          echo ""
+          echo "License symbols found:"
+          echo "$SYMBOLS"
+        else
+          echo "protected=false" >> $GITHUB_OUTPUT
+          echo "symbols=" >> $GITHUB_OUTPUT
+
+          if [[ "${{ inputs.fail-on-missing }}" == "true" ]]; then
+            echo "::error::No Archergate license protection detected in $BINARY. Link archergate_license into your binary before releasing. See https://archergate.io/sdk"
+            exit 1
+          else
+            echo "::warning::No Archergate license protection detected in $BINARY"
+          fi
+        fi

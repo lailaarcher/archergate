@@ -1,0 +1,26 @@
+{
+    "name": "archergate-audit",
+    "version": "0.1.0",
+    "description": "Scan your project for license protection. Tells you if your software ships unprotected.",
+    "main": "index.js",
+    "type": "module",
+    "bin": {
+        "archergate-audit": "./index.js"
+    },
+    "keywords": [
+        "license",
+        "audit",
+        "security",
+        "copy-protection",
+        "software-protection",
+        "archergate",
+        "cli"
+    ],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/lailaarcher/archergate"
+    },
+    "homepage": "https://archergate.io/sdk",
+    "author": "Archergate <hello@archergate.io>"
+}

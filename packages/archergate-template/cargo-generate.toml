@@ -1,0 +1,16 @@
+[template]
+cargo_generate_version = ">=0.10.0"
+
+[placeholders.app_name]
+type = "string"
+prompt = "Application name"
+
+[placeholders.app_id]
+type = "string"
+prompt = "Application ID (e.g. com.yourname.app)"
+default = "com.example.app"
+
+[placeholders.server_url]
+type = "string"
+prompt = "License server URL"
+default = "https://license.example.com"
