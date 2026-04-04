@@ -425,8 +425,8 @@
             <div class="hero-left">
                 <span class="beta-badge">Open Beta</span>
                 <span class="eyebrow">License SDK</span>
-                <h1>Machine-bound licensing for <em>indie software.</em></h1>
-                <p>Hardware-locked keys. 30-day offline validation. 14-day trials. Cryptographic tamper detection. Integrates in 30 minutes. MIT licensed.</p>
+                <h1>Copy protection that <em>ships with your binary.</em></h1>
+                <p>Archergate is a licensing library. Drop it into your C, C++, or Rust project. It locks each license key to the hardware it was activated on. Users who buy your software can run it. Users who didn't, can't. Works offline. Self-hostable. MIT licensed.</p>
             </div>
             <div class="hero-right">
                 <!-- Direct downloads (no gate) -->
@@ -486,34 +486,22 @@
             </div>
         </div>
 
-        <!-- What's in the SDK -->
+        <!-- How it works -->
         <section class="stack-section">
-            <span class="stack-eyebrow">What's inside</span>
-            <h2 class="stack-title">Everything between your binary and a <em>cracked copy.</em></h2>
+            <span class="stack-eyebrow">How it works</span>
+            <h2 class="stack-title">Your app calls the SDK at startup. <em>That's it.</em></h2>
             <div class="stack-grid">
                 <div class="stack-item">
-                    <h3 class="stack-item-title">Machine binding</h3>
-                    <p class="stack-item-text">SHA-256 fingerprint from CPU identity and OS install ID. License stays on the machine it was activated on.</p>
+                    <h3 class="stack-item-title">1. User buys a key</h3>
+                    <p class="stack-item-text">You generate license keys through the server. Sell them however you want: Gumroad, Stripe, your own store.</p>
                 </div>
                 <div class="stack-item">
-                    <h3 class="stack-item-title">Offline validation</h3>
-                    <p class="stack-item-text">Validate once, work offline for 30 days. HMAC-signed cache. Touring musicians, remote studios, air-gapped labs.</p>
+                    <h3 class="stack-item-title">2. App validates on launch</h3>
+                    <p class="stack-item-text">Three lines in your startup code. The SDK checks the key against the server and locks it to this machine's hardware.</p>
                 </div>
                 <div class="stack-item">
-                    <h3 class="stack-item-title">14-day trials</h3>
-                    <p class="stack-item-text">Built into the SDK. No server, no signup, no tracking. Users try it, then decide.</p>
-                </div>
-                <div class="stack-item">
-                    <h3 class="stack-item-title">Tamper detection</h3>
-                    <p class="stack-item-text">HMAC-signed cache. Validation receipts. Heartbeat counter. Three independent verification paths.</p>
-                </div>
-                <div class="stack-item">
-                    <h3 class="stack-item-title">Rust, C, C++</h3>
-                    <p class="stack-item-text">Native Rust SDK. C FFI with RAII wrapper. REST API for any other language. Static library, no runtime deps.</p>
-                </div>
-                <div class="stack-item">
-                    <h3 class="stack-item-title">Self-hosted server</h3>
-                    <p class="stack-item-text">Reference server included. Axum + SQLite. Run it yourself. Or use Archergate's hosted option when it ships.</p>
+                    <h3 class="stack-item-title">3. Works offline for 30 days</h3>
+                    <p class="stack-item-text">After one successful check, a signed cache lets the app run without internet. Good for studios, live rigs, air-gapped machines.</p>
                 </div>
             </div>
         </section>
@@ -521,7 +509,7 @@
         <!-- Code -->
         <section class="code-section">
             <span class="stack-eyebrow">Integration</span>
-            <h2 class="stack-title">Three lines. <em>Thirty minutes.</em></h2>
+            <h2 class="stack-title">Pick your language. <em>Add three lines.</em></h2>
             <div class="code-grid">
                 <div>
                     <div class="code-card-label">Rust</div>
@@ -569,28 +557,20 @@ POST /validate
             <h2 class="faq-title">Common questions</h2>
             <div class="faq-grid">
                 <div class="faq-item">
-                    <h4>Is the SDK free?</h4>
-                    <p>Yes. MIT licensed, forever. We may charge for managed hosting later. The SDK and self-hosted server stay free.</p>
+                    <h4>What does this replace?</h4>
+                    <p>Custom license code you'd write yourself (weeks of work), or services like Keygen, Gumroad's license API, or iLok. This is a drop-in static library, not a platform.</p>
                 </div>
                 <div class="faq-item">
-                    <h4>What languages are supported?</h4>
-                    <p>Rust natively. C and C++ via FFI. Any language via REST API (Python, C#, Go, JS). Static library links into your binary.</p>
+                    <h4>Where does the server run?</h4>
+                    <p>Wherever you want. The reference server is Rust + SQLite. Deploy on a $5 VPS, a Docker container, or your existing infrastructure. Archergate hosted option coming later.</p>
                 </div>
                 <div class="faq-item">
-                    <h4>Can I run my own server?</h4>
-                    <p>Yes. Reference server ships with the SDK. Rust + SQLite. Deploy it on any $5 VPS. Modify it however you want.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>What data do you collect?</h4>
-                    <p>Self-hosted: nothing. Archergate cloud (future): license key, machine fingerprint, activation date. No analytics, no tracking.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>What about offline users?</h4>
-                    <p>One online validation, then 30 days offline. HMAC-signed local cache. No internet needed during that window.</p>
+                    <h4>What data touches your servers?</h4>
+                    <p>Nothing, if you self-host. The SDK talks to YOUR server. License key, machine fingerprint, activation timestamp. No analytics, no telemetry.</p>
                 </div>
                 <div class="faq-item">
                     <h4>What if Archergate disappears?</h4>
-                    <p>The SDK is open source. Self-host, fork, or replace the server. Your licensing depends on your code, not ours.</p>
+                    <p>The SDK is MIT licensed. Fork it, vendor it, rewrite the server. Your shipping product depends on your copy of the code, not ours.</p>
                 </div>
             </div>
         </section>
