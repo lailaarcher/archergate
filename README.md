@@ -138,18 +138,25 @@ No internet for a month? No problem. Cache tampered with? Caught.
 
 ```
 crates/
-  archergate-license/         Rust SDK + C FFI + C++ wrapper
-  archergate-license-server/  Self-hosted validation server
-  archergate-core/            Creative memory engine (internal)
-  archergate-tauri/           Tauri desktop app (internal)
-assets/
-  sdk-beta.html               Beta signup page
-  outreach/                   Community post templates
-api/
-  sdk-beta.js                 Resend email integration (serverless)
-scripts/
-  build-release-binaries.sh   Cross-platform build script
+  archergate-license/            Rust SDK + C FFI + C++ wrapper
+  archergate-license-server/     Self-hosted validation server
+packages/
+  archergate-mcp/                MCP server for AI coding assistants
+  archergate-action/             GitHub Action: verify binaries before release
+  archergate-audit/              CLI tool: scan projects for license protection
+  archergate-juce/               Drop-in JUCE plugin integration (LicenseManager.h)
+  archergate-template/           cargo-generate template for new Rust projects
+  tauri-plugin-archergate/       Tauri v2 plugin with TypeScript bindings
 ```
+
+## Ecosystem
+
+| Package | Install | What it does |
+|---|---|---|
+| [archergate-license](https://crates.io/crates/archergate-license) | `cargo add archergate-license` | Rust SDK with C FFI |
+| [archergate-license-server](https://crates.io/crates/archergate-license-server) | `cargo install archergate-license-server` | Self-hosted validation server |
+| [archergate-mcp-server](https://www.npmjs.com/package/archergate-mcp-server) | `npx archergate-mcp-server` | MCP server for AI assistants |
+| [archergate-audit](https://www.npmjs.com/package/archergate-audit) | `npx archergate-audit` | Scan projects for license protection |
 
 ## Tests
 
