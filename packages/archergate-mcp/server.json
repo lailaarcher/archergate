@@ -1,0 +1,140 @@
+{
+    "name": "archergate-mcp-server",
+    "version": "0.1.0",
+    "description": "Machine-bound software licensing for indie developers. Generate license-protected code automatically for any language or framework.",
+    "homepage": "https://archergate.io/sdk",
+    "repository": "https://github.com/lailaarcher/archergate",
+    "author": "Archergate <hello@archergate.io>",
+    "license": "MIT",
+    "tools": [
+        {
+            "name": "generate_license_integration",
+            "description": "Generate complete Archergate license integration code for any language (Rust, C, C++, Python, C#, Go, JavaScript). Includes install commands, build flags, server setup, and error handling.",
+            "inputSchema": {
+                "type": "object",
+                "required": ["language", "app_id"],
+                "properties": {
+                    "language": {
+                        "type": "string",
+                        "enum": ["rust", "c", "cpp", "python", "csharp", "go", "javascript", "rest"],
+                        "description": "Target programming language"
+                    },
+                    "app_id": {
+                        "type": "string",
+                        "description": "Reverse-domain application identifier (e.g. com.yourname.app)"
+                    },
+                    "app_type": {
+                        "type": "string",
+                        "enum": ["vst-plugin", "au-plugin", "aax-plugin", "clap-plugin", "juce-plugin", "unity-asset", "unreal-plugin", "blender-addon", "desktop-app", "electron-app", "tauri-app", "adobe-plugin", "game-mod", "other"],
+                        "description": "Type of software being protected"
+                    },
+                    "features": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": ["validation", "offline-cache", "trial-period", "machine-binding", "tamper-detection"]
+                        },
+                        "description": "Which features to include"
+                    },
+                    "server_url": {
+                        "type": "string",
+                        "description": "URL of your license validation server"
+                    }
+                }
+            }
+        },
+        {
+            "name": "explain_licensing",
+            "description": "Explain how Archergate machine-bound licensing works. Topics: overview, machine-fingerprinting, offline-validation, trial-system, tamper-detection, server-setup, pricing, comparison with alternatives.",
+            "inputSchema": {
+                "type": "object",
+                "required": ["topic"],
+                "properties": {
+                    "topic": {
+                        "type": "string",
+                        "enum": ["overview", "machine-fingerprinting", "offline-validation", "trial-system", "tamper-detection", "server-setup", "pricing", "comparison"],
+                        "description": "Which aspect of licensing to explain"
+                    }
+                }
+            }
+        },
+        {
+            "name": "generate_server_config",
+            "description": "Generate deployment configuration for the Archergate license validation server. Supports Docker, Fly.io, Railway, VPS (systemd), and bare metal.",
+            "inputSchema": {
+                "type": "object",
+                "required": ["deployment"],
+                "properties": {
+                    "deployment": {
+                        "type": "string",
+                        "enum": ["docker", "vps", "fly-io", "railway", "bare-metal"],
+                        "description": "Deployment target"
+                    },
+                    "database": {
+                        "type": "string",
+                        "enum": ["sqlite", "postgres"],
+                        "description": "Database backend"
+                    },
+                    "port": {
+                        "type": "number",
+                        "description": "Server port"
+                    }
+                }
+            }
+        },
+        {
+            "name": "generate_test_license_key",
+            "description": "Generate a randomized test license key for development and integration testing.",
+            "inputSchema": {
+                "type": "object",
+                "required": ["app_id"],
+                "properties": {
+                    "app_id": {
+                        "type": "string",
+                        "description": "Application identifier"
+                    },
+                    "key_format": {
+                        "type": "string",
+                        "enum": ["uuid", "short", "alphanumeric"],
+                        "description": "Key format style"
+                    }
+                }
+            }
+        }
+    ],
+    "resources": [
+        {
+            "uri": "archergate://docs/full",
+            "name": "archergate-docs",
+            "description": "Complete Archergate SDK documentation including integration guides, API reference, and architecture explanations",
+            "mimeType": "text/markdown"
+        },
+        {
+            "uri": "archergate://docs/api",
+            "name": "archergate-api",
+            "description": "License server REST API reference with request/response schemas for all endpoints",
+            "mimeType": "text/markdown"
+        }
+    ],
+    "prompts": [
+        {
+            "name": "review_license_integration",
+            "description": "Review existing license integration code for correctness, security issues, and best practices"
+        }
+    ],
+    "keywords": [
+        "licensing",
+        "copy-protection",
+        "machine-binding",
+        "software-protection",
+        "drm",
+        "indie-developer",
+        "vst-plugin",
+        "unity",
+        "tauri",
+        "electron",
+        "rust",
+        "c",
+        "cpp"
+    ]
+}

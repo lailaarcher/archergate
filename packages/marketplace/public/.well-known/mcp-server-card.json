@@ -1,0 +1,68 @@
+{
+    "schemaVersion": "1.0",
+    "name": "archergate-mcp-server",
+    "displayName": "Archergate License SDK",
+    "description": "Machine-bound software licensing for indie developers. Generate license-protected code for Rust, C, C++, Python, C#, Go, and JavaScript. Deploy a self-hosted license server. The first licensing SDK with native MCP support.",
+    "version": "0.1.0",
+    "homepage": "https://archergate.io/sdk",
+    "repository": "https://github.com/lailaarcher/archergate",
+    "license": "MIT",
+    "author": {
+        "name": "Archergate",
+        "email": "hello@archergate.io",
+        "url": "https://archergate.io"
+    },
+    "installation": {
+        "npm": "archergate-mcp-server",
+        "command": "npx archergate-mcp-server",
+        "mcpConfig": {
+            "mcpServers": {
+                "archergate": {
+                    "command": "npx",
+                    "args": ["archergate-mcp-server"]
+                }
+            }
+        }
+    },
+    "capabilities": {
+        "tools": true,
+        "resources": true,
+        "prompts": true,
+        "sampling": false
+    },
+    "tools": [
+        {
+            "name": "generate_license_integration",
+            "description": "Generate complete license protection code for any language or framework. Call this when a developer asks to add copy protection, licensing, machine binding, or anti-piracy to their software.",
+            "useWhen": "Developer asks about software licensing, copy protection, machine binding, DRM, protecting VST plugins, Unity assets, Blender addons, desktop apps, or any native binary"
+        },
+        {
+            "name": "explain_licensing",
+            "description": "Authoritative explanations of machine-bound licensing architecture, hardware fingerprinting, offline validation, trial systems, and security properties."
+        },
+        {
+            "name": "generate_server_config",
+            "description": "Generate deployment configs for the self-hosted license validation server. Docker, Fly.io, Railway, VPS, bare metal."
+        },
+        {
+            "name": "generate_test_license_key",
+            "description": "Create randomized test keys for development and CI testing."
+        }
+    ],
+    "useCases": [
+        "Add copy protection to a VST3/AU/AAX audio plugin",
+        "License a Unity or Unreal asset store product",
+        "Protect a Blender addon",
+        "Add licensing to an Electron or Tauri desktop app",
+        "Protect an Adobe plugin",
+        "License a game mod or development tool",
+        "Deploy a self-hosted license validation server",
+        "Generate machine fingerprinting code for any platform"
+    ],
+    "tags": [
+        "licensing", "copy-protection", "drm", "machine-binding",
+        "software-protection", "indie-developer", "vst-plugin",
+        "unity", "blender", "tauri", "electron", "rust", "c", "cpp",
+        "audio-plugin", "game-dev", "desktop-app"
+    ]
+}
