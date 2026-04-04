@@ -20,20 +20,16 @@ jobs:
         include:
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            archive: archergate-license-windows-x86_64
-            ext: .exe
+            archive: archergate-license-windows-x64
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            archive: archergate-license-linux-x86_64
-            ext: ""
+            archive: archergate-license-linux-x64
           - os: macos-latest
             target: x86_64-apple-darwin
             archive: archergate-license-macos-x86_64
-            ext: ""
           - os: macos-latest
             target: aarch64-apple-darwin
             archive: archergate-license-macos-aarch64
-            ext: ""
 
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +39,7 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
-      - name: Cache cargo registry and target
+      - name: Cache cargo
         uses: actions/cache@v4
         with:
           path: |
@@ -61,13 +57,14 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           mkdir -p staging
-          cp target/${{ matrix.target }}/release/archergate-license${{ matrix.ext }} staging/
-          if [ -f include/archergate_license.h ]; then
-            cp include/archergate_license.h staging/
-          fi
-          if [ -f README.md ]; then
-            cp README.md staging/
-          fi
+          # Static library
+          cp target/${{ matrix.target }}/release/libarchergate_license.a staging/ 2>/dev/null || true
+          # Dynamic library
+          cp target/${{ matrix.target }}/release/libarchergate_license.dylib staging/ 2>/dev/null || true
+          cp target/${{ matrix.target }}/release/libarchergate_license.so staging/ 2>/dev/null || true
+          # Header
+          cp crates/archergate-license/include/archergate_license.h staging/
+          cp crates/archergate-license/README.md staging/ 2>/dev/null || cp README.md staging/
           cd staging
           tar czf ../${{ matrix.archive }}.tar.gz *
 
@@ -76,13 +73,14 @@ jobs:
         shell: bash
         run: |
           mkdir -p staging
-          cp target/${{ matrix.target }}/release/archergate-license${{ matrix.ext }} staging/
-          if [ -f include/archergate_license.h ]; then
-            cp include/archergate_license.h staging/
-          fi
-          if [ -f README.md ]; then
-            cp README.md staging/
-          fi
+          # Static library
+          cp target/${{ matrix.target }}/release/archergate_license.lib staging/ 2>/dev/null || true
+          # Dynamic library
+          cp target/${{ matrix.target }}/release/archergate_license.dll staging/ 2>/dev/null || true
+          cp target/${{ matrix.target }}/release/archergate_license.dll.lib staging/ 2>/dev/null || true
+          # Header
+          cp crates/archergate-license/include/archergate_license.h staging/
+          cp crates/archergate-license/README.md staging/ 2>/dev/null || cp README.md staging/
           cd staging
           tar czf ../${{ matrix.archive }}.tar.gz *
 
@@ -111,21 +109,23 @@ jobs:
           name: archergate-license-macos-aarch64
           path: artifacts/aarch64
 
-      - name: Extract and create universal binary
+      - name: Create universal binary
         run: |
           mkdir -p extract/x86_64 extract/aarch64 staging
           tar xzf artifacts/x86_64/archergate-license-macos-x86_64.tar.gz -C extract/x86_64
           tar xzf artifacts/aarch64/archergate-license-macos-aarch64.tar.gz -C extract/aarch64
+          # Universal static lib
           lipo -create \
-            extract/x86_64/archergate-license \
-            extract/aarch64/archergate-license \
-            -output staging/archergate-license
-          if [ -f extract/x86_64/archergate_license.h ]; then
-            cp extract/x86_64/archergate_license.h staging/
-          fi
-          if [ -f extract/x86_64/README.md ]; then
-            cp extract/x86_64/README.md staging/
-          fi
+            extract/x86_64/libarchergate_license.a \
+            extract/aarch64/libarchergate_license.a \
+            -output staging/libarchergate_license.a
+          # Universal dylib
+          lipo -create \
+            extract/x86_64/libarchergate_license.dylib \
+            extract/aarch64/libarchergate_license.dylib \
+            -output staging/libarchergate_license.dylib 2>/dev/null || true
+          cp extract/x86_64/archergate_license.h staging/
+          cp extract/x86_64/README.md staging/ 2>/dev/null || true
           cd staging
           tar czf ../archergate-license-macos-universal.tar.gz *
 
