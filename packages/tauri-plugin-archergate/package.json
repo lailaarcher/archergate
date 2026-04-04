@@ -1,0 +1,23 @@
+{
+  "name": "tauri-plugin-archergate",
+  "version": "0.1.0",
+  "description": "TypeScript bindings for the Archergate Tauri licensing plugin",
+  "license": "MIT",
+  "types": "guest-js/index.ts",
+  "files": [
+    "guest-js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lailaarcher/archergate"
+  },
+  "keywords": [
+    "tauri",
+    "plugin",
+    "license",
+    "archergate"
+  ],
+  "peerDependencies": {
+    "@tauri-apps/api": ">=2.0.0"
+  }
+}
