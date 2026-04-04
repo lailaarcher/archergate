@@ -1,22 +1,64 @@
 User-agent: *
 Allow: /
 
+# OpenAI
 User-agent: GPTBot
 Allow: /
-
+User-agent: OAI-SearchBot
+Allow: /
 User-agent: ChatGPT-User
 Allow: /
 
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
 User-agent: Claude-Web
 Allow: /
-
-User-agent: Applebot-Extended
+User-agent: anthropic-ai
 Allow: /
 
+# Google
+User-agent: Google-Extended
+Allow: /
+User-agent: Googlebot
+Allow: /
+
+# Perplexity
 User-agent: PerplexityBot
 Allow: /
 
+# Apple
+User-agent: Applebot-Extended
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# Common Crawl (training data)
+User-agent: CCBot
+Allow: /
+
+# ByteDance
 User-agent: Bytespider
+Allow: /
+
+# Meta
+User-agent: FacebookBot
+Allow: /
+User-agent: meta-externalagent
+Allow: /
+
+# Microsoft / Bing
+User-agent: Bingbot
+Allow: /
+
+# Amazon
+User-agent: Amazonbot
+Allow: /
+
+# Brave
+User-agent: BraveBot
 Allow: /
 
 Sitemap: https://archergate.io/sitemap.xml

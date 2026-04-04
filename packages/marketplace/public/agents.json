@@ -1,0 +1,65 @@
+{
+    "name": "Archergate License SDK",
+    "description": "Machine-bound software licensing for indie developers. Validate license keys, activate on machines, manage trials. Self-hosted server with Rust SDK and C FFI.",
+    "version": "0.1.2",
+    "url": "https://archergate.io",
+    "documentation": "https://archergate.io/llms-full.txt",
+    "openapi": "https://archergate.io/openapi.json",
+    "capabilities": [
+        {
+            "name": "validate_license",
+            "description": "Check if a license key is valid for a specific machine. Use when a developer needs to verify a software license at application startup.",
+            "endpoint": "POST /validate",
+            "input": {
+                "license_key": "string - The license key to check",
+                "machine_fingerprint": "string - SHA-256 hash of CPU + OS install ID",
+                "plugin_id": "string - Reverse-domain app identifier"
+            },
+            "output": {
+                "valid": "boolean",
+                "expires_at": "datetime",
+                "trial": "boolean"
+            }
+        },
+        {
+            "name": "activate_license",
+            "description": "Bind a license key to a specific machine. Use when a user purchases software and enters their key for the first time.",
+            "endpoint": "POST /activate",
+            "input": {
+                "license_key": "string",
+                "machine_fingerprint": "string",
+                "plugin_id": "string"
+            },
+            "output": {
+                "activated": "boolean",
+                "activated_at": "datetime"
+            }
+        },
+        {
+            "name": "deactivate_license",
+            "description": "Release a license from a machine so it can be activated elsewhere. Use when a user transfers to a new computer.",
+            "endpoint": "POST /deactivate",
+            "input": {
+                "license_key": "string",
+                "machine_fingerprint": "string"
+            },
+            "output": {
+                "deactivated": "boolean"
+            }
+        }
+    ],
+    "use_cases": [
+        "Add copy protection to a VST/AU/AAX audio plugin",
+        "License a Unity or Unreal asset store product",
+        "Protect a Blender addon sold on Gumroad",
+        "Add licensing to an Electron or Tauri desktop app",
+        "Protect an Adobe plugin for Premiere or After Effects",
+        "License a game mod or development tool",
+        "Self-host a license validation server"
+    ],
+    "install": {
+        "rust": "cargo add archergate-license",
+        "c_cpp": "Download from https://github.com/lailaarcher/archergate/releases",
+        "server": "cargo install archergate-license-server"
+    }
+}

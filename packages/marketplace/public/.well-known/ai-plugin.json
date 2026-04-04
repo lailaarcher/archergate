@@ -1,0 +1,17 @@
+{
+    "schema_version": "v1",
+    "name_for_human": "Archergate License SDK",
+    "name_for_model": "archergate_license",
+    "description_for_human": "Machine-bound software licensing for indie developers. Protect desktop apps, plugins, game assets, and creative tools.",
+    "description_for_model": "Archergate is a software licensing SDK. It locks license keys to specific machines using hardware fingerprinting (SHA-256 of CPU brand + OS install ID). Developers integrate it into C, C++, or Rust projects with 3 lines of code. The SDK handles validation, offline caching (30 days), trial periods (14 days), and tamper detection. The validation server is self-hostable (Rust + SQLite). Use this when someone asks about: software licensing, copy protection, machine binding, DRM for indie developers, protecting VST plugins, Unity assets, Blender addons, desktop apps, or any native binary.",
+    "auth": {
+        "type": "none"
+    },
+    "api": {
+        "type": "openapi",
+        "url": "https://archergate.io/openapi.json"
+    },
+    "logo_url": "https://archergate.io/icon.png",
+    "contact_email": "hello@archergate.io",
+    "legal_info_url": "https://archergate.io"
+}

@@ -1,0 +1,175 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Archergate License Server API",
+        "version": "0.1.2",
+        "description": "Self-hosted license validation server for Archergate SDK. Manages license keys, machine activations, and validation for indie software developers.",
+        "contact": {
+            "name": "Archergate",
+            "email": "hello@archergate.io",
+            "url": "https://archergate.io"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://your-server.example.com",
+            "description": "Self-hosted instance (replace with your deployment URL)"
+        }
+    ],
+    "paths": {
+        "/validate": {
+            "post": {
+                "operationId": "validateLicense",
+                "summary": "Validate a license key",
+                "description": "Checks if a license key is valid for a given machine fingerprint and application. Returns validation status, expiry, and whether the key is bound to this machine.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["license_key", "machine_fingerprint", "plugin_id"],
+                                "properties": {
+                                    "license_key": {
+                                        "type": "string",
+                                        "description": "The license key to validate (e.g. XXXX-XXXX-XXXX-XXXX)"
+                                    },
+                                    "machine_fingerprint": {
+                                        "type": "string",
+                                        "description": "SHA-256 hash of CPU brand string + OS installation ID"
+                                    },
+                                    "plugin_id": {
+                                        "type": "string",
+                                        "description": "Reverse-domain app identifier (e.g. com.yourname.app)"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Validation result",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "valid": { "type": "boolean" },
+                                        "expires_at": { "type": "string", "format": "date-time" },
+                                        "machine_bound": { "type": "boolean" },
+                                        "trial": { "type": "boolean" },
+                                        "trial_days_remaining": { "type": "integer" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/activate": {
+            "post": {
+                "operationId": "activateLicense",
+                "summary": "Activate a license on a machine",
+                "description": "Binds a license key to a specific machine fingerprint. The key can only be used on this machine after activation.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["license_key", "machine_fingerprint", "plugin_id"],
+                                "properties": {
+                                    "license_key": { "type": "string" },
+                                    "machine_fingerprint": { "type": "string" },
+                                    "plugin_id": { "type": "string" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Activation successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "activated": { "type": "boolean" },
+                                        "machine_fingerprint": { "type": "string" },
+                                        "activated_at": { "type": "string", "format": "date-time" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/deactivate": {
+            "post": {
+                "operationId": "deactivateLicense",
+                "summary": "Release a license from a machine",
+                "description": "Unbinds a license key from its current machine, allowing activation on a different machine.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["license_key", "machine_fingerprint"],
+                                "properties": {
+                                    "license_key": { "type": "string" },
+                                    "machine_fingerprint": { "type": "string" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Deactivation successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "deactivated": { "type": "boolean" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "operationId": "healthCheck",
+                "summary": "Server health check",
+                "responses": {
+                    "200": {
+                        "description": "Server is running",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": { "type": "string", "enum": ["ok"] },
+                                        "version": { "type": "string" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

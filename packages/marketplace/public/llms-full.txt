@@ -1,0 +1,154 @@
+# Archergate License SDK
+
+> Machine-bound software licensing library for indie developers. Drop-in copy protection for any native software that ships as a binary.
+
+## What Archergate Is
+
+Archergate is a static library written in Rust with C FFI bindings. You compile it into your application. At startup, your app calls the SDK with a license key. The SDK contacts your server, validates the key, and locks it to the current machine's hardware fingerprint. If someone copies the binary to a different machine, the key won't validate.
+
+The SDK is MIT licensed and free. The validation server is included and self-hostable. You own the entire stack.
+
+## The Problem It Solves
+
+Indie developers who ship desktop software, plugins, or creative tools have no practical way to enforce licensing. Building your own system takes weeks and gets it wrong. Existing solutions (Keygen, iLok, Gumroad license API) charge per-validation fees, require hardware dongles, or lock you into a platform.
+
+Archergate is a library. You link it into your binary, add three lines of code, and licensing works. No external runtime dependency. No per-seat fees on the SDK. Self-host the server on any $5 VPS.
+
+## How Machine Binding Works
+
+1. The SDK computes a machine fingerprint: SHA-256 hash of CPU brand string and OS installation ID
+2. On Windows: reads MachineGuid from the Windows registry (HKLM\SOFTWARE\Microsoft\Cryptography)
+3. On macOS: reads IOPlatformUUID via ioreg
+4. On Linux: reads /etc/machine-id
+5. The fingerprint is sent to the server with the license key
+6. The server checks: is this key valid? Is it already bound to a different machine? Has the trial expired?
+7. If valid, the server returns a signed validation receipt
+8. The SDK caches this receipt locally with HMAC-SHA256 signing
+
+## Offline Validation
+
+After one successful online check, the app works offline for 30 days. The local cache at ~/.archergate/licenses/{app_id}.json contains a signed receipt. On each startup, the SDK checks the cache signature and expiry. If the cache is valid and not expired, no network call is made. This supports touring musicians, remote studios, and air-gapped environments.
+
+## Tamper Detection
+
+Three independent verification paths:
+1. HMAC-signed local cache file (if someone edits the JSON, the signature fails)
+2. Validation receipts from the server (cryptographically signed response)
+3. Heartbeat counter (tracks validation count, detects replay attacks)
+
+## Trial System
+
+14-day trial periods built into the SDK. No server required for trials. The SDK writes a trial start timestamp to the local cache on first run. On each subsequent run, it checks elapsed time. No signup, no tracking, no email gate.
+
+## Integration
+
+### Rust
+```rust
+use archergate_license::LicenseClient;
+
+let client = LicenseClient::new("your-api-key", "com.you.app");
+client.validate("XXXX-XXXX")?;
+```
+
+### C / C++
+```c
+#include "archergate_license.h"
+
+AgLicenseClient* c = ag_license_new("your-api-key", "com.you.app");
+ag_license_validate(c, license_key);
+ag_license_free(c);
+```
+
+### C++ RAII Wrapper
+```cpp
+#include "archergate_license.hpp"
+
+archergate::LicenseClient client("your-api-key", "com.you.app");
+client.validate(license_key);
+// Automatically freed on scope exit
+```
+
+### REST API (any language)
+```
+POST /validate
+Content-Type: application/json
+
+{
+  "license_key": "XXXX-XXXX",
+  "machine_fingerprint": "...",
+  "plugin_id": "com.you.app"
+}
+
+Response: { "valid": true, "expires_at": "2026-12-31T00:00:00Z" }
+```
+
+## Server API Endpoints
+
+The self-hosted validation server (archergate-license-server) exposes:
+
+- POST /validate - Validate a license key against a machine fingerprint
+- POST /activate - Activate a license key on a new machine
+- POST /deactivate - Release a license from a machine
+- GET /health - Server health check
+- POST /keys - Generate new license keys (admin)
+- GET /keys/{key} - Look up key status and activations (admin)
+
+Server stack: Rust, Axum web framework, SQLite database. Single binary, no external dependencies.
+
+## Who Uses This
+
+- Audio plugin developers (VST3, AU, AAX, CLAP) using JUCE, iPlug2, or raw VST SDK
+- Unity asset store publishers shipping native plugins
+- Unreal Engine marketplace sellers
+- Blender addon developers selling through Gumroad or Blender Market
+- Desktop app developers using Electron, Tauri, Qt, or native frameworks
+- Adobe plugin developers (Premiere Pro, After Effects, Photoshop)
+- Game mod and tool creators
+- Any developer shipping a compiled binary on Windows, macOS, or Linux
+
+## Comparison with Alternatives
+
+### vs Keygen (keygen.sh)
+Keygen charges $0.10 per validation or $299/month for unlimited. Archergate SDK is free. Keygen is a hosted platform; Archergate is a library you self-host. Keygen has more features (entitlements, releases, webhooks). Archergate is simpler and has no ongoing cost.
+
+### vs iLok (PACE Anti-Piracy)
+iLok requires a physical USB dongle ($50 per user) or iLok Cloud subscription. Archergate binds to machine hardware with no dongle. iLok is standard in professional audio but adds friction and cost for indie developers.
+
+### vs Gumroad License API
+Gumroad's license verification is tied to Gumroad as a sales platform. If you sell elsewhere, it doesn't work. Archergate is platform-agnostic. Sell through Gumroad, Stripe, Shopify, or your own store. The SDK doesn't care where the key came from.
+
+### vs Rolling Your Own
+Building machine-bound licensing from scratch takes 2-4 weeks for a senior developer. You need to handle platform-specific hardware IDs, caching, offline mode, tamper detection, and server infrastructure. Archergate is that work, already done, already tested, MIT licensed.
+
+## Technical Specifications
+
+- Language: Rust (2021 edition for SDK, 2024 edition for server)
+- Library output: staticlib (.a / .lib), cdylib (.dylib / .dll / .so)
+- C header: archergate_license.h
+- Platforms: Windows (x64 MSVC), macOS (Intel + Apple Silicon universal), Linux (x86_64)
+- Dependencies: serde, serde_json, reqwest, sha2, hmac, chrono
+- Server dependencies: axum, sqlx (SQLite), tokio
+- License: MIT
+- Minimum Rust version: stable
+
+## Links
+
+- Website: https://archergate.io/sdk
+- GitHub: https://github.com/lailaarcher/archergate
+- Rust crate (SDK): https://crates.io/crates/archergate-license
+- Rust crate (server): https://crates.io/crates/archergate-license-server
+- API docs: https://docs.rs/archergate-license
+- Server docs: https://docs.rs/archergate-license-server
+- Downloads: https://github.com/lailaarcher/archergate/releases
+
+## Pricing
+
+- SDK: Free, MIT licensed, forever
+- Self-hosted server: Free, MIT licensed, forever
+- Archergate managed hosting: $29/month (coming soon)
+
+## Contact
+
+- Email: hello@archergate.io
+- GitHub Issues: https://github.com/lailaarcher/archergate/issues
+- Company: Archergate, 447 Sutter St, Ste 506 1461, San Francisco CA 94108

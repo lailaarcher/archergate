@@ -4,7 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archergate License SDK</title>
-    <meta name="description" content="Copy protection that ships with your binary. Machine-bound licensing for indie software developers.">
+    <meta name="description" content="Copy protection that ships with your binary. Machine-bound licensing SDK for indie software developers. Rust, C, C++. MIT licensed.">
+    <meta name="keywords" content="software licensing, copy protection, license key, machine binding, indie developer, VST plugin protection, Unity asset licensing, Blender addon license, desktop app licensing, Rust SDK, C library, anti-piracy, hardware fingerprint, offline validation">
+    <link rel="canonical" href="https://archergate.io/sdk">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Archergate License SDK",
+        "description": "Machine-bound software licensing library for indie developers. Drop-in copy protection for desktop apps, audio plugins, game assets, and creative tools.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Windows, macOS, Linux",
+        "url": "https://archergate.io/sdk",
+        "downloadUrl": "https://github.com/lailaarcher/archergate/releases",
+        "softwareVersion": "0.1.2",
+        "license": "https://opensource.org/licenses/MIT",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "description": "SDK and self-hosted server are free forever. Managed hosting $29/month."
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "Archergate",
+            "url": "https://archergate.io"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Archergate",
+        "url": "https://archergate.io",
+        "logo": "https://archergate.io/icon.png",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "hello@archergate.io",
+            "contactType": "technical support"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "447 Sutter St, Ste 506 1461",
+            "addressLocality": "San Francisco",
+            "addressRegion": "CA",
+            "postalCode": "94108",
+            "addressCountry": "US"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What does Archergate replace?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Custom license code you would write yourself (2-4 weeks of work), or services like Keygen ($0.10/validation), iLok (requires hardware dongle), or Gumroad's license API (platform lock-in). Archergate is a static library you compile into your binary. No runtime dependency on external services."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How does machine-bound licensing work?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The SDK computes a SHA-256 fingerprint from the CPU brand string and OS installation ID (Windows registry MachineGuid, macOS IOPlatformUUID, or Linux /etc/machine-id). When a license key is activated, it is bound to that fingerprint. If the binary is copied to another machine, the fingerprint won't match and validation fails."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does Archergate work offline?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. After one online validation, the SDK caches a signed receipt locally. The app works offline for 30 days. The cache is HMAC-SHA256 signed to prevent tampering. This supports touring musicians, remote studios, and air-gapped environments."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What programming languages does Archergate support?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Rust natively via crates.io (cargo add archergate-license). C and C++ via FFI with a static library and header file. Any other language via REST API (Python, C#, Go, JavaScript, etc.). The library compiles as a .a (Unix) or .lib (Windows) static library with no runtime dependencies."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is Archergate free?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The SDK and self-hosted server are free forever under the MIT license. Archergate managed hosting (where we run the server for you) will be $29/month when it launches. You can fork the entire project if Archergate disappears."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What software can I protect with Archergate?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Any native software that ships as a compiled binary: VST3/AU/AAX/CLAP audio plugins (JUCE, iPlug2), Unity and Unreal assets, Blender addons, Electron and Tauri desktop apps, Adobe plugins (Premiere Pro, After Effects, Photoshop), game mods and tools, AutoCAD/Revit plugins, and any C-linkable application."
+                }
+            }
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to add license protection to your software with Archergate",
+        "description": "Add machine-bound licensing to any C, C++, or Rust application in three steps.",
+        "step": [
+            {
+                "@type": "HowToStep",
+                "position": 1,
+                "name": "Download the SDK",
+                "text": "Download the static library and header for your platform (Windows .lib, macOS .a, Linux .a) from the releases page, or run cargo add archergate-license for Rust projects."
+            },
+            {
+                "@type": "HowToStep",
+                "position": 2,
+                "name": "Add three lines to your startup code",
+                "text": "Include the header, create a client with your API key and app ID, and call validate with the user's license key. In C: #include archergate_license.h, AgLicenseClient* c = ag_license_new(key, app_id), ag_license_validate(c, license_key)."
+            },
+            {
+                "@type": "HowToStep",
+                "position": 3,
+                "name": "Deploy the validation server",
+                "text": "Run the included Archergate license server (Rust + SQLite single binary) on any VPS, Docker container, or cloud instance. Generate license keys through the server admin API and distribute them to customers."
+            }
+        ]
+    }
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
