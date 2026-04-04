@@ -1,5 +1,5 @@
 {
-    "name": "@archergate/mcp-server",
+    "name": "archergate-mcp-server",
     "version": "0.1.0",
     "description": "MCP server for Archergate License SDK. Lets AI coding assistants generate license-protected software automatically.",
     "main": "index.js",
