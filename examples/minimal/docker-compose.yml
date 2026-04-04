@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  archergate-server:
+    image: rust:1.76-slim
+    working_dir: /app
+    volumes:
+      - ./../..:/app
+    ports:
+      - "3000:3000"
+    environment:
+      RUST_LOG: info
+      AG_SECRET: "test-secret-32-characters-long"
+      AG_DB: "/tmp/licenses.db"
+      AG_PORT: "3000"
+    command: >
+      bash -c "
+        cd /app &&
+        cargo build --release --bin archergate-license-server &&
+        /app/target/release/archergate-license-server
+      "
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
