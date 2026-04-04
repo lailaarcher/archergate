@@ -1,5 +1,10 @@
 {
   "rewrites": [
     { "source": "/sdk", "destination": "/sdk.html" }
-  ]
+  ],
+  "functions": {
+    "api/mcp.mjs": {
+      "maxDuration": 30
+    }
+  }
 }
