@@ -1,4 +1,4 @@
-# archergate
+# Archergate License SDK
 
 Machine-bound software licensing for indie developers.
 
