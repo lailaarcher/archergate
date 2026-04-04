@@ -1,5 +1,5 @@
 {
   "rewrites": [
-    { "source": "/sdk", "destination": "/assets/sdk-beta.html" }
+    { "source": "/sdk", "destination": "/sdk.html" }
   ]
 }
