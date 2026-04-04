@@ -314,6 +314,30 @@
             border-radius: 3px;
         }
 
+        /* Download rows */
+        .dl-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .dl-row:first-of-type { border-top: 1px solid var(--border); }
+        .dl-row:hover { opacity: 0.7; }
+        .dl-platform {
+            font-family: var(--mono);
+            font-size: 0.88rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+        .dl-detail {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--text3);
+        }
+
         /* FAQ */
         .faq-section {
             padding: 80px 64px;
@@ -405,29 +429,46 @@
                 <p>Hardware-locked keys. 30-day offline validation. 14-day trials. Cryptographic tamper detection. Integrates in 30 minutes. MIT licensed.</p>
             </div>
             <div class="hero-right">
-                <div class="sdk-form" id="form-container">
-                    <form id="sdk-form" onsubmit="return submitSDK(event)">
-                        <input type="text" id="sdk-name" placeholder="Name" required>
-                        <input type="email" id="sdk-email" placeholder="Email" required>
-                        <input type="text" id="sdk-app" placeholder="App or plugin name" required>
-                        <input type="text" id="sdk-appid" placeholder="com.yourname.app" required>
-                        <select id="sdk-type" onchange="this.classList.toggle('selected', this.value !== '')">
-                            <option value="">Software type</option>
-                            <option value="vst-plugin">VST / AU / AAX Plugin</option>
-                            <option value="unity-asset">Unity Asset</option>
-                            <option value="blender-addon">Blender Addon</option>
-                            <option value="desktop-app">Desktop App (Electron / Tauri / Native)</option>
-                            <option value="adobe-plugin">Adobe Plugin (Premiere / AE / PS)</option>
-                            <option value="game-mod">Game Mod / Tool</option>
-                            <option value="other">Other</option>
-                        </select>
-                        <button type="submit" id="sdk-btn">Get the SDK</button>
-                    </form>
-                    <p class="form-note">Download links sent to your email. MIT licensed. No lock-in.</p>
+                <!-- Direct downloads (no gate) -->
+                <div class="download-section" id="download-section">
+                    <div style="font-family:var(--mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:16px;">Download</div>
+
+                    <a href="https://github.com/lailaarcher/archergate/releases/latest/download/archergate-license-windows-x64.tar.gz" class="dl-row" onclick="trackDL('windows')">
+                        <span class="dl-platform">Windows</span>
+                        <span class="dl-detail">MSVC x64 .tar.gz</span>
+                    </a>
+                    <a href="https://github.com/lailaarcher/archergate/releases/latest/download/archergate-license-macos-universal.tar.gz" class="dl-row" onclick="trackDL('macos')">
+                        <span class="dl-platform">macOS</span>
+                        <span class="dl-detail">Intel + Apple Silicon .tar.gz</span>
+                    </a>
+                    <a href="https://github.com/lailaarcher/archergate/releases/latest/download/archergate-license-linux-x64.tar.gz" class="dl-row" onclick="trackDL('linux')">
+                        <span class="dl-platform">Linux</span>
+                        <span class="dl-detail">x86_64 .tar.gz</span>
+                    </a>
+                    <a href="https://crates.io/crates/archergate-license" class="dl-row" onclick="trackDL('rust')">
+                        <span class="dl-platform">Rust</span>
+                        <span class="dl-detail">cargo add archergate-license</span>
+                    </a>
+                    <a href="https://github.com/lailaarcher/archergate" class="dl-row" onclick="trackDL('source')">
+                        <span class="dl-platform">Source</span>
+                        <span class="dl-detail">github.com/lailaarcher/archergate</span>
+                    </a>
+
+                    <div style="font-family:var(--mono);font-size:0.72rem;color:var(--text3);margin-top:16px;line-height:1.5;">
+                        Each archive contains the static library, C header, and README.
+                    </div>
+
+                    <div style="border-top:1px solid var(--border);margin:24px 0;padding-top:24px;">
+                        <div style="font-family:var(--mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:12px;">Or get the full guide by email</div>
+                        <form id="sdk-form" onsubmit="return submitSDK(event)" style="display:flex;gap:8px;">
+                            <input type="email" id="sdk-email" placeholder="you@email.com" required style="flex:1;padding:12px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--mono);font-size:0.85rem;outline:none;">
+                            <button type="submit" id="sdk-btn" style="padding:12px 20px;background:var(--teal);color:var(--bg);border:none;border-radius:4px;font-family:var(--mono);font-size:0.85rem;font-weight:500;cursor:pointer;white-space:nowrap;">Send guide</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="form-success" id="form-success">
-                    <h3>Check your email.</h3>
-                    <p>Download links and integration guide sent. If nothing shows up in 2 minutes, check spam.</p>
+                <div class="form-success" id="form-success" style="display:none;">
+                    <h3>Check your inbox.</h3>
+                    <p>Integration guide and download links sent.</p>
                 </div>
             </div>
         </section>
@@ -645,7 +686,18 @@ POST /validate
         addEventListener('resize', () => { resize(); init(); });
         document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
 
-        // Form submission
+        // Download tracking
+        function trackDL(platform) {
+            try {
+                fetch('/api/track', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ event: 'download', platform: platform, ts: Date.now() })
+                }).catch(function(){});
+            } catch(e) {}
+        }
+
+        // Email guide form
         async function submitSDK(e) {
             e.preventDefault();
             const btn = document.getElementById('sdk-btn');
@@ -653,11 +705,7 @@ POST /validate
             btn.textContent = 'Sending...';
 
             const data = {
-                name: document.getElementById('sdk-name').value,
                 email: document.getElementById('sdk-email').value,
-                app_name: document.getElementById('sdk-app').value,
-                app_id: document.getElementById('sdk-appid').value,
-                software_type: document.getElementById('sdk-type').value,
                 source: 'sdk-beta'
             };
 
@@ -669,15 +717,15 @@ POST /validate
                 });
 
                 if (resp.ok) {
-                    document.getElementById('form-container').querySelector('form').style.display = 'none';
-                    document.getElementById('form-container').querySelector('.form-note').style.display = 'none';
+                    document.getElementById('download-section').style.display = 'none';
                     document.getElementById('form-success').style.display = 'block';
+                    try { fetch('/api/track', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: 'email_signup', ts: Date.now() }) }).catch(function(){}); } catch(e) {}
                 } else {
-                    btn.textContent = 'Something went wrong. Try again.';
+                    btn.textContent = 'Try again';
                     btn.disabled = false;
                 }
             } catch (err) {
-                btn.textContent = 'Network error. Try again.';
+                btn.textContent = 'Try again';
                 btn.disabled = false;
             }
 
