@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archergate vs Keygen: Licensing Platform Comparison | Archergate</title>
+    <meta name="description" content="Honest comparison of Archergate and Keygen for software licensing. Pricing, features, self-hosting, and architecture differences. When to choose each platform.">
+    <meta name="keywords" content="archergate vs keygen, keygen alternative, self-hosted licensing, keygen pricing, software licensing comparison, open source licensing SDK, keygen.sh alternative, indie developer licensing">
+    <link rel="canonical" href="https://archergate.io/archergate-vs-keygen">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Archergate vs Keygen: Licensing Platform Comparison",
+        "description": "Honest comparison of Archergate and Keygen for software licensing. Pricing, features, self-hosting, and architecture differences.",
+        "author": {
+            "@type": "Organization",
+            "name": "Archergate",
+            "url": "https://archergate.io"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Archergate",
+            "url": "https://archergate.io"
+        },
+        "datePublished": "2026-04-03",
+        "dateModified": "2026-04-03",
+        "mainEntityOfPage": "https://archergate.io/archergate-vs-keygen",
+        "url": "https://archergate.io/archergate-vs-keygen",
+        "about": {
+            "@type": "Thing",
+            "name": "Software Licensing Platform Comparison"
+        },
+        "proficiencyLevel": "Intermediate"
+    }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background: #F5F3EF;
+            color: #222;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrap {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            padding: 48px 0 40px;
+            border-bottom: 1px solid #D4D0C8;
+        }
+        header .brand {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            letter-spacing: 0.15em;
+            color: #222;
+            text-decoration: none;
+        }
+        header nav {
+            float: right;
+            margin-top: 2px;
+        }
+        header nav a {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #888;
+            text-decoration: none;
+            margin-left: 24px;
+        }
+        header nav a:hover { color: #222; }
+
+        .article-header {
+            padding: 64px 0 48px;
+            border-bottom: 1px solid #D4D0C8;
+        }
+        .article-header .label {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .article-header h1 {
+            font-family: Georgia, serif;
+            font-size: 38px;
+            font-weight: normal;
+            font-style: italic;
+            line-height: 1.25;
+            color: #222;
+            margin-bottom: 20px;
+        }
+        .article-header .meta {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .article-body {
+            padding: 48px 0;
+        }
+        .article-body h2 {
+            font-family: Georgia, serif;
+            font-size: 26px;
+            font-weight: normal;
+            font-style: italic;
+            margin: 48px 0 20px;
+            line-height: 1.3;
+        }
+        .article-body h2:first-child {
+            margin-top: 0;
+        }
+        .article-body h3 {
+            font-family: Georgia, serif;
+            font-size: 20px;
+            font-weight: normal;
+            margin: 32px 0 12px;
+        }
+        .article-body p {
+            font-size: 17px;
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        .article-body ul, .article-body ol {
+            margin: 0 0 16px 24px;
+            font-size: 17px;
+            color: #444;
+            line-height: 1.8;
+        }
+        .article-body li {
+            margin-bottom: 6px;
+        }
+        .article-body strong {
+            color: #222;
+        }
+
+        .code-block {
+            background: #222;
+            border-radius: 3px;
+            padding: 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #DEE1E8;
+            overflow-x: auto;
+            margin: 20px 0 24px;
+        }
+        .code-block .kw { color: #6A9ABF; }
+        .code-block .str { color: #98C379; }
+        .code-block .cmt { color: #666; }
+        .code-label {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            color: #888;
+            margin-bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0 24px;
+            font-size: 15px;
+        }
+        th {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 2px solid #D4D0C8;
+            color: #222;
+        }
+        td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #E8E5DF;
+            color: #555;
+            vertical-align: top;
+        }
+
+        .callout {
+            background: #EDEAE4;
+            border-left: 3px solid #D4D0C8;
+            padding: 20px 24px;
+            margin: 24px 0;
+            font-size: 16px;
+            color: #444;
+        }
+        .callout strong {
+            color: #222;
+        }
+
+        .cta {
+            padding: 48px 0;
+            border-top: 1px solid #D4D0C8;
+            text-align: center;
+        }
+        .cta h2 {
+            font-family: Georgia, serif;
+            font-size: 26px;
+            font-weight: normal;
+            font-style: italic;
+            margin-bottom: 16px;
+        }
+        .cta p {
+            font-size: 17px;
+            color: #555;
+            margin-bottom: 24px;
+        }
+        .cta a.btn {
+            display: inline-block;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            letter-spacing: 0.05em;
+            background: #222;
+            color: #F5F3EF;
+            padding: 14px 32px;
+            border-radius: 3px;
+            text-decoration: none;
+        }
+        .cta a.btn:hover { background: #444; }
+
+        .related {
+            padding: 40px 0;
+            border-top: 1px solid #D4D0C8;
+        }
+        .related .label {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .related a {
+            display: block;
+            font-family: Georgia, serif;
+            font-size: 17px;
+            color: #222;
+            text-decoration: none;
+            padding: 10px 0;
+            border-bottom: 1px solid #E8E5DF;
+        }
+        .related a:hover { color: #888; }
+
+        footer {
+            padding: 40px 0 64px;
+            border-top: 1px solid #D4D0C8;
+        }
+        footer .brand {
+            font-family: Georgia, serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 6px;
+        }
+        footer .meta {
+            font-family: Georgia, serif;
+            font-size: 13px;
+            color: #888;
+        }
+        footer .meta a {
+            color: #888;
+            text-decoration: none;
+        }
+        footer .meta a:hover { color: #222; }
+
+        @media (max-width: 680px) {
+            .wrap { padding: 0 20px; }
+            header nav { float: none; margin-top: 12px; }
+            header nav a { margin-left: 0; margin-right: 20px; }
+            .article-header { padding: 40px 0 32px; }
+            .article-header h1 { font-size: 28px; }
+            table { font-size: 13px; }
+            th, td { padding: 8px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+
+        <header>
+            <a class="brand" href="https://archergate.io">A R C H E R G A T E</a>
+            <nav>
+                <a href="https://archergate.io/sdk">SDK</a>
+                <a href="https://github.com/lailaarcher/archergate">Source</a>
+                <a href="https://docs.rs/archergate-license">Docs</a>
+            </nav>
+        </header>
+
+        <div class="article-header">
+            <span class="label">Comparison</span>
+            <h1>Archergate vs Keygen</h1>
+            <span class="meta">April 2026 / 7 min read</span>
+        </div>
+
+        <article class="article-body">
+
+            <h2>Two different approaches to licensing.</h2>
+
+            <p>Archergate and Keygen both solve the same problem: letting software developers add license key validation to their products. They take fundamentally different approaches. Keygen is a hosted API platform. Archergate is an embeddable SDK with a self-hostable server. This difference in architecture shapes everything else: pricing, data ownership, integration patterns, and what happens if the service goes away.</p>
+
+            <p>This comparison is written by the Archergate team. We have tried to be honest about where Keygen is the better choice and where Archergate has advantages. If you spot an inaccuracy, email us at hello@archergate.io and we will correct it.</p>
+
+            <h2>Feature comparison.</h2>
+
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>Archergate</th>
+                    <th>Keygen</th>
+                </tr>
+                <tr>
+                    <td><strong>Architecture</strong></td>
+                    <td>Static library + self-hosted server</td>
+                    <td>Hosted REST API</td>
+                </tr>
+                <tr>
+                    <td><strong>Languages</strong></td>
+                    <td>Rust, C, C++ (native); REST API for others</td>
+                    <td>REST API with SDKs for many languages</td>
+                </tr>
+                <tr>
+                    <td><strong>Machine binding</strong></td>
+                    <td>Built-in (SHA-256 fingerprint)</td>
+                    <td>Built-in (fingerprint scoping)</td>
+                </tr>
+                <tr>
+                    <td><strong>Offline validation</strong></td>
+                    <td>30-day HMAC-signed cache</td>
+                    <td>License file caching</td>
+                </tr>
+                <tr>
+                    <td><strong>Trial system</strong></td>
+                    <td>14-day, no server needed</td>
+                    <td>Configurable trial policies</td>
+                </tr>
+                <tr>
+                    <td><strong>Self-hosting</strong></td>
+                    <td>Yes (included Rust + SQLite server)</td>
+                    <td>Keygen EE (enterprise license required)</td>
+                </tr>
+                <tr>
+                    <td><strong>Source available</strong></td>
+                    <td>MIT licensed, fully open</td>
+                    <td>Proprietary (EE source available)</td>
+                </tr>
+                <tr>
+                    <td><strong>Dashboard</strong></td>
+                    <td>Admin API only (no web UI yet)</td>
+                    <td>Full web dashboard</td>
+                </tr>
+                <tr>
+                    <td><strong>Webhooks</strong></td>
+                    <td>Basic (activation events)</td>
+                    <td>Comprehensive event system</td>
+                </tr>
+                <tr>
+                    <td><strong>Entitlements</strong></td>
+                    <td>Not yet (planned)</td>
+                    <td>Full entitlement system</td>
+                </tr>
+                <tr>
+                    <td><strong>User accounts</strong></td>
+                    <td>Not yet (planned)</td>
+                    <td>Built-in user management</td>
+                </tr>
+                <tr>
+                    <td><strong>Package distribution</strong></td>
+                    <td>Not included</td>
+                    <td>Built-in release/artifact hosting</td>
+                </tr>
+                <tr>
+                    <td><strong>Floating licenses</strong></td>
+                    <td>Not yet</td>
+                    <td>Supported</td>
+                </tr>
+            </table>
+
+            <h2>Pricing comparison.</h2>
+
+            <table>
+                <tr>
+                    <th>Tier</th>
+                    <th>Archergate</th>
+                    <th>Keygen</th>
+                </tr>
+                <tr>
+                    <td><strong>Free tier</strong></td>
+                    <td>SDK + self-hosted server, unlimited forever</td>
+                    <td>Up to 25 licenses, limited API calls</td>
+                </tr>
+                <tr>
+                    <td><strong>Growth</strong></td>
+                    <td>$29/mo managed hosting (coming soon)</td>
+                    <td>$79/mo (500 licenses)</td>
+                </tr>
+                <tr>
+                    <td><strong>Scale</strong></td>
+                    <td>$29/mo (same tier, no per-license cost)</td>
+                    <td>$249/mo (2,500 licenses)</td>
+                </tr>
+                <tr>
+                    <td><strong>Enterprise</strong></td>
+                    <td>$29/mo (same tier) or self-host free</td>
+                    <td>Custom pricing</td>
+                </tr>
+                <tr>
+                    <td><strong>Per-validation cost</strong></td>
+                    <td>None</td>
+                    <td>None (within plan limits)</td>
+                </tr>
+                <tr>
+                    <td><strong>Overage fees</strong></td>
+                    <td>None (self-hosted is unlimited)</td>
+                    <td>Varies by plan</td>
+                </tr>
+            </table>
+
+            <p>The pricing difference is the most significant distinction for indie developers. With Archergate, you can protect unlimited licenses for $0 if you self-host, or $29/month if you want managed hosting. With Keygen, costs scale with your license count. If you have 100 paying customers, the free tier works. If you have 1,000, you are on a paid plan. If you have 10,000, you are on enterprise pricing.</p>
+
+            <p>For a solo developer selling a $29 plugin, the economics matter. Keygen's pricing is designed for companies with revenue to match their license volume. Archergate's pricing is designed for developers who want licensing infrastructure without a recurring expense that grows with success.</p>
+
+            <h2>Where Keygen is stronger.</h2>
+
+            <p>Keygen is a more mature product with a broader feature set. If you need any of the following, Keygen is the better choice today:</p>
+
+            <ul>
+                <li><strong>Web dashboard.</strong> Keygen has a full management UI for viewing licenses, users, machines, and analytics. Archergate currently has only an admin API. You would need to build your own dashboard or manage licenses through API calls and scripts.</li>
+                <li><strong>Entitlements and feature flags.</strong> Keygen supports entitlements: you can define features and tie them to license tiers. A "Pro" license unlocks different capabilities than a "Starter" license, managed through Keygen's API. Archergate does not have an entitlements system yet.</li>
+                <li><strong>User management.</strong> Keygen has built-in user accounts. Your customers can log in to a portal to manage their licenses and machines. Archergate has no user-facing portal.</li>
+                <li><strong>Package distribution.</strong> Keygen can host your software releases and serve authenticated downloads. Your customers download the software through Keygen, and only users with valid licenses get access. Archergate does not handle distribution.</li>
+                <li><strong>Floating licenses.</strong> If you need concurrent-use licensing (a pool of 10 licenses shared across a 50-person team, with a maximum of 10 simultaneous users), Keygen supports this natively. Archergate does not.</li>
+                <li><strong>Language SDKs.</strong> Keygen provides official SDKs for Ruby, Python, Node.js, Go, C#, Swift, and others. Archergate has native SDKs for Rust, C, and C++, with everything else going through the REST API.</li>
+            </ul>
+
+            <h2>Where Archergate is stronger.</h2>
+
+            <ul>
+                <li><strong>Self-hosting without enterprise pricing.</strong> Archergate's server ships with the open-source SDK. You can deploy it on your own infrastructure today at no cost. Keygen's self-hosted option (Keygen EE) requires an enterprise license.</li>
+                <li><strong>Static library integration.</strong> Archergate compiles into your binary as a static library. There is no runtime dependency on an external service. The validation logic, fingerprinting, and caching are all compiled into your executable. For VST plugins and other latency-sensitive applications, this matters because there is no dynamic library loading or external process communication.</li>
+                <li><strong>Cost at scale.</strong> If you sell 10,000 licenses, Archergate costs $0 (self-hosted) or $29/month (managed). The cost is flat regardless of how many licenses you issue or validations you process.</li>
+                <li><strong>Full source access.</strong> The entire Archergate codebase is MIT licensed. You can audit the validation logic, modify the fingerprinting algorithm, change the caching behavior, or fork the server. You are not dependent on a proprietary API that could change its terms.</li>
+                <li><strong>Offline-first design.</strong> Archergate was built for environments where internet access is unreliable: recording studios, touring rigs, remote installations. The 30-day offline cache with HMAC signing is a first-class feature, not an afterthought.</li>
+                <li><strong>No vendor dependency.</strong> If Archergate the company stops operating, nothing about your licensing breaks. The server runs on your infrastructure, the SDK is compiled into your binary, and the source code is on GitHub under MIT. With Keygen's hosted service, if Keygen goes down, your license validations fail (unless you are on Keygen EE).</li>
+            </ul>
+
+            <h2>Architecture differences.</h2>
+
+            <p>The core architectural difference is where the validation logic lives.</p>
+
+            <p>With Keygen, your application makes an HTTP request to Keygen's servers (or your Keygen EE instance) on each validation. The validation logic, machine fingerprinting, and license policy enforcement all happen on Keygen's side. Your application is a thin client that sends data and receives a pass/fail response.</p>
+
+            <p>With Archergate, the validation logic is compiled into your binary. The SDK computes the machine fingerprint locally, checks the local cache first, and only contacts your server if the cache is expired or missing. The server's role is limited: it stores license-to-machine bindings and responds to validation requests. The intelligence is in the client library, not the server.</p>
+
+            <p>This has practical implications. If your Keygen-powered application cannot reach the Keygen API (network outage, DNS failure, geographic routing issues), new validations fail. Keygen mitigates this with license file caching, but the primary mode is online. With Archergate, the primary mode is offline (using the local cache), and online validation only happens when the cache expires.</p>
+
+            <h2>When to choose Keygen.</h2>
+
+            <p>Choose Keygen if you need a full-featured licensing platform with a web dashboard, user management, entitlements, floating licenses, and package distribution. If you are a company with a team managing licenses and you want a managed service you do not have to operate, Keygen is the more complete product. It is also the better choice if you primarily build in languages without C FFI (pure Python, pure Ruby, pure JavaScript) and want first-class SDK support.</p>
+
+            <h2>When to choose Archergate.</h2>
+
+            <p>Choose Archergate if you are an indie developer or small team who wants machine-bound licensing without recurring platform costs. If you build native applications (C, C++, Rust), VST plugins, or Tauri apps and you want the validation logic compiled into your binary rather than dependent on an external API, Archergate fits better. If self-hosting and full source ownership matter to you, Archergate is the only option that provides both under an MIT license at no cost.</p>
+
+            <div class="callout">
+                <strong>Disclosure:</strong> This comparison was written by the Archergate team in April 2026. Keygen's features and pricing may have changed since publication. We encourage you to check keygen.sh for their current offerings. If you find an error in this comparison, email hello@archergate.io.
+            </div>
+
+        </article>
+
+        <div class="cta">
+            <h2>Try Archergate free.</h2>
+            <p>MIT licensed SDK. Self-hosted server. No per-license fees.</p>
+            <a class="btn" href="https://archergate.io/sdk">Get the SDK</a>
+        </div>
+
+        <div class="related">
+            <span class="label">Related</span>
+            <a href="https://archergate.io/how-to-protect-vst-plugin">How to Protect Your VST Plugin from Piracy</a>
+            <a href="https://archergate.io/how-to-add-licensing-to-desktop-app">Add Licensing to Any Desktop App</a>
+            <a href="https://archergate.io/machine-bound-licensing-explained">How Machine-Bound Licensing Works</a>
+        </div>
+
+        <footer>
+            <div class="brand">Archergate</div>
+            <div class="meta">
+                <a href="https://archergate.io">archergate.io</a> | 447 Sutter St, Ste 506 1461, San Francisco CA 94108
+            </div>
+        </footer>
+
+    </div>
+</body>
+</html>

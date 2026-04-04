@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Add Licensing to a Desktop App | Archergate</title>
+    <meta name="description" content="Add copy protection to Electron, Tauri, Qt, and native desktop applications. Machine fingerprinting, REST API integration, and offline validation for indie developers.">
+    <meta name="keywords" content="add licensing to desktop app, Electron app copy protection, Tauri app licensing, Qt license system, desktop software licensing, machine fingerprint licensing, software activation system, indie developer license key">
+    <link rel="canonical" href="https://archergate.io/how-to-add-licensing-to-desktop-app">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "How to Add Licensing to a Desktop App",
+        "description": "Add copy protection to Electron, Tauri, Qt, and native desktop applications using machine fingerprinting and REST API integration.",
+        "author": {
+            "@type": "Organization",
+            "name": "Archergate",
+            "url": "https://archergate.io"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Archergate",
+            "url": "https://archergate.io"
+        },
+        "datePublished": "2026-04-03",
+        "dateModified": "2026-04-03",
+        "mainEntityOfPage": "https://archergate.io/how-to-add-licensing-to-desktop-app",
+        "url": "https://archergate.io/how-to-add-licensing-to-desktop-app",
+        "about": {
+            "@type": "Thing",
+            "name": "Desktop Application Licensing"
+        },
+        "dependencies": "HTTP client library for your language/framework",
+        "proficiencyLevel": "Intermediate"
+    }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background: #F5F3EF;
+            color: #222;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrap {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            padding: 48px 0 40px;
+            border-bottom: 1px solid #D4D0C8;
+        }
+        header .brand {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            letter-spacing: 0.15em;
+            color: #222;
+            text-decoration: none;
+        }
+        header nav {
+            float: right;
+            margin-top: 2px;
+        }
+        header nav a {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #888;
+            text-decoration: none;
+            margin-left: 24px;
+        }
+        header nav a:hover { color: #222; }
+
+        .article-header {
+            padding: 64px 0 48px;
+            border-bottom: 1px solid #D4D0C8;
+        }
+        .article-header .label {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .article-header h1 {
+            font-family: Georgia, serif;
+            font-size: 38px;
+            font-weight: normal;
+            font-style: italic;
+            line-height: 1.25;
+            color: #222;
+            margin-bottom: 20px;
+        }
+        .article-header .meta {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .article-body {
+            padding: 48px 0;
+        }
+        .article-body h2 {
+            font-family: Georgia, serif;
+            font-size: 26px;
+            font-weight: normal;
+            font-style: italic;
+            margin: 48px 0 20px;
+            line-height: 1.3;
+        }
+        .article-body h2:first-child {
+            margin-top: 0;
+        }
+        .article-body h3 {
+            font-family: Georgia, serif;
+            font-size: 20px;
+            font-weight: normal;
+            margin: 32px 0 12px;
+        }
+        .article-body p {
+            font-size: 17px;
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        .article-body ul, .article-body ol {
+            margin: 0 0 16px 24px;
+            font-size: 17px;
+            color: #444;
+            line-height: 1.8;
+        }
+        .article-body li {
+            margin-bottom: 6px;
+        }
+        .article-body strong {
+            color: #222;
+        }
+
+        .code-block {
+            background: #222;
+            border-radius: 3px;
+            padding: 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #DEE1E8;
+            overflow-x: auto;
+            margin: 20px 0 24px;
+        }
+        .code-block .kw { color: #6A9ABF; }
+        .code-block .str { color: #98C379; }
+        .code-block .cmt { color: #666; }
+        .code-label {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            color: #888;
+            margin-bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0 24px;
+            font-size: 15px;
+        }
+        th {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 2px solid #D4D0C8;
+            color: #222;
+        }
+        td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #E8E5DF;
+            color: #555;
+        }
+
+        .cta {
+            padding: 48px 0;
+            border-top: 1px solid #D4D0C8;
+            text-align: center;
+        }
+        .cta h2 {
+            font-family: Georgia, serif;
+            font-size: 26px;
+            font-weight: normal;
+            font-style: italic;
+            margin-bottom: 16px;
+        }
+        .cta p {
+            font-size: 17px;
+            color: #555;
+            margin-bottom: 24px;
+        }
+        .cta a.btn {
+            display: inline-block;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            letter-spacing: 0.05em;
+            background: #222;
+            color: #F5F3EF;
+            padding: 14px 32px;
+            border-radius: 3px;
+            text-decoration: none;
+        }
+        .cta a.btn:hover { background: #444; }
+
+        .related {
+            padding: 40px 0;
+            border-top: 1px solid #D4D0C8;
+        }
+        .related .label {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .related a {
+            display: block;
+            font-family: Georgia, serif;
+            font-size: 17px;
+            color: #222;
+            text-decoration: none;
+            padding: 10px 0;
+            border-bottom: 1px solid #E8E5DF;
+        }
+        .related a:hover { color: #888; }
+
+        footer {
+            padding: 40px 0 64px;
+            border-top: 1px solid #D4D0C8;
+        }
+        footer .brand {
+            font-family: Georgia, serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 6px;
+        }
+        footer .meta {
+            font-family: Georgia, serif;
+            font-size: 13px;
+            color: #888;
+        }
+        footer .meta a {
+            color: #888;
+            text-decoration: none;
+        }
+        footer .meta a:hover { color: #222; }
+
+        @media (max-width: 680px) {
+            .wrap { padding: 0 20px; }
+            header nav { float: none; margin-top: 12px; }
+            header nav a { margin-left: 0; margin-right: 20px; }
+            .article-header { padding: 40px 0 32px; }
+            .article-header h1 { font-size: 28px; }
+            table { font-size: 13px; }
+            th, td { padding: 8px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+
+        <header>
+            <a class="brand" href="https://archergate.io">A R C H E R G A T E</a>
+            <nav>
+                <a href="https://archergate.io/sdk">SDK</a>
+                <a href="https://github.com/lailaarcher/archergate">Source</a>
+                <a href="https://docs.rs/archergate-license">Docs</a>
+            </nav>
+        </header>
+
+        <div class="article-header">
+            <span class="label">Technical Guide</span>
+            <h1>How to Add Licensing to a Desktop App</h1>
+            <span class="meta">April 2026 / 7 min read</span>
+        </div>
+
+        <article class="article-body">
+
+            <h2>The landscape of desktop app licensing.</h2>
+
+            <p>Desktop applications have a distribution problem that web apps do not. When your software runs on the user's machine, the user has the binary. They can copy it, share it, reverse-engineer it, or redistribute it. Whether you are building with Electron, Tauri, Qt, WPF, or a native C++ toolkit, you face the same fundamental challenge: how do you verify that the person running your software actually paid for it?</p>
+
+            <p>The answer involves three components: a license key (something the user receives at purchase), a machine fingerprint (something that identifies the user's hardware), and a validation server (something that binds the key to the fingerprint). This article walks through how to implement all three for any desktop framework.</p>
+
+            <h2>Machine fingerprinting.</h2>
+
+            <p>Machine fingerprinting is the process of computing a stable, unique identifier for a specific computer. The fingerprint should not change when the user updates their OS or installs new software, but it should change when they move to a different machine.</p>
+
+            <p>In practice, a good fingerprint combines two signals: the CPU brand string and the OS installation identifier. The CPU brand string is stable across reboots and OS updates. The OS installation ID changes when the user reinstalls the OS, which is an acceptable re-activation trigger. Combining both prevents fingerprint collisions (two identical laptops with fresh OS installs would have the same OS ID but different CPU serial numbers are not reliably available, so the brand string provides differentiation when combined with other factors).</p>
+
+            <p>The Archergate SDK computes this fingerprint internally, but if you are integrating via the REST API, you need to compute it yourself. Here is how to obtain the OS installation identifier on each platform.</p>
+
+            <table>
+                <tr>
+                    <th>Platform</th>
+                    <th>Source</th>
+                    <th>Access Method</th>
+                </tr>
+                <tr>
+                    <td>Windows</td>
+                    <td>MachineGuid</td>
+                    <td>Registry: HKLM\SOFTWARE\Microsoft\Cryptography</td>
+                </tr>
+                <tr>
+                    <td>macOS</td>
+                    <td>IOPlatformUUID</td>
+                    <td>ioreg -rd1 -c IOPlatformExpertDevice</td>
+                </tr>
+                <tr>
+                    <td>Linux</td>
+                    <td>/etc/machine-id</td>
+                    <td>Read file contents directly</td>
+                </tr>
+            </table>
+
+            <p>Concatenate the CPU brand string with the OS ID, then SHA-256 hash the result. This gives you a 64-character hex string that uniquely identifies the machine. Send this as the <code>machine_fingerprint</code> field in your API call.</p>
+
+            <h2>Integration for Electron apps.</h2>
+
+            <p>Electron apps run on Node.js. You cannot link a static C library directly, but you can call the Archergate REST API from your main process. The validation call should happen in your main process (not the renderer) to prevent users from bypassing it through DevTools.</p>
+
+            <div class="code-label">main.js (Electron main process)</div>
+            <div class="code-block">
+<span class="kw">const</span> { execSync } = require(<span class="str">'child_process'</span>);
+<span class="kw">const</span> crypto = require(<span class="str">'crypto'</span>);
+<span class="kw">const</span> os = require(<span class="str">'os'</span>);
+
+<span class="kw">function</span> getMachineFingerprint() {
+  <span class="kw">let</span> osId;
+  <span class="kw">if</span> (process.platform === <span class="str">'win32'</span>) {
+    osId = execSync(
+      <span class="str">'reg query HKLM\\\\SOFTWARE\\\\Microsoft\\\\Cryptography /v MachineGuid'</span>
+    ).toString().match(/REG_SZ\s+(.+)/)[1].trim();
+  } <span class="kw">else if</span> (process.platform === <span class="str">'darwin'</span>) {
+    osId = execSync(
+      <span class="str">'ioreg -rd1 -c IOPlatformExpertDevice'</span>
+    ).toString().match(/IOPlatformUUID.*?"(.+?)"/)[1];
+  } <span class="kw">else</span> {
+    osId = require(<span class="str">'fs'</span>).readFileSync(
+      <span class="str">'/etc/machine-id'</span>, <span class="str">'utf8'</span>
+    ).trim();
+  }
+
+  <span class="kw">const</span> cpuBrand = os.cpus()[0].model;
+  <span class="kw">return</span> crypto.createHash(<span class="str">'sha256'</span>)
+    .update(cpuBrand + osId).digest(<span class="str">'hex'</span>);
+}
+
+<span class="kw">async function</span> validateLicense(licenseKey) {
+  <span class="kw">const</span> resp = <span class="kw">await</span> fetch(
+    <span class="str">'https://your-server.com/validate'</span>, {
+    method: <span class="str">'POST'</span>,
+    headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+    body: JSON.stringify({
+      license_key: licenseKey,
+      machine_fingerprint: getMachineFingerprint(),
+      plugin_id: <span class="str">'com.yourname.yourapp'</span>
+    })
+  });
+  <span class="kw">return</span> resp.json();
+}
+            </div>
+
+            <p>Store the validation result in a signed local file so the app works offline. Re-validate on a schedule (every 7 or 30 days) rather than on every launch.</p>
+
+            <h2>Integration for Tauri apps.</h2>
+
+            <p>Tauri apps use a Rust backend, which means you can link the Archergate SDK directly as a static library. This is the most secure option because the validation logic is compiled into native code, not sitting in JavaScript where it can be patched.</p>
+
+            <div class="code-label">Cargo.toml</div>
+            <div class="code-block">
+[dependencies]
+archergate-license = <span class="str">"0.1"</span>
+            </div>
+
+            <div class="code-label">src-tauri/src/main.rs</div>
+            <div class="code-block">
+<span class="kw">use</span> archergate_license::LicenseClient;
+
+#[tauri::command]
+<span class="kw">fn</span> check_license(key: String) -> Result&lt;String, String&gt; {
+    <span class="kw">let</span> client = LicenseClient::new(
+        <span class="str">"YOUR_API_KEY"</span>,
+        <span class="str">"com.yourname.app"</span>
+    );
+    <span class="kw">match</span> client.validate(&key) {
+        Ok(status) => Ok(format!(<span class="str">"{:?}"</span>, status)),
+        Err(e) => Err(e.to_string()),
+    }
+}
+            </div>
+
+            <p>Because the validation runs in compiled Rust on the backend, a user cannot bypass it by modifying frontend JavaScript. The Tauri IPC bridge only receives the result, not the validation logic.</p>
+
+            <h2>Integration for Qt and native C++ apps.</h2>
+
+            <p>Qt applications and other native C++ apps can use the Archergate C++ wrapper directly. Link the static library and include the header.</p>
+
+            <div class="code-label">main.cpp</div>
+            <div class="code-block">
+<span class="kw">#include</span> <span class="str">"archergate_license.h"</span>
+
+<span class="kw">int</span> main(<span class="kw">int</span> argc, <span class="kw">char</span>* argv[]) {
+    archergate::License license(
+        <span class="str">"YOUR_API_KEY"</span>,
+        <span class="str">"com.yourname.qtapp"</span>
+    );
+
+    <span class="kw">auto</span> result = license.validate(storedLicenseKey);
+
+    <span class="kw">if</span> (result.status != archergate::Status::Valid) {
+        <span class="cmt">// Show activation dialog</span>
+        showActivationWindow();
+        <span class="kw">return</span> 1;
+    }
+
+    <span class="cmt">// Proceed with application</span>
+    QApplication app(argc, argv);
+    <span class="cmt">// ...</span>
+}
+            </div>
+
+            <h2>REST API for any language.</h2>
+
+            <p>If your app is written in Python, C#, Go, Java, or any other language, you can call the Archergate validation server over HTTP. The API is a single POST endpoint.</p>
+
+            <div class="code-label">HTTP request</div>
+            <div class="code-block">
+POST /validate HTTP/1.1
+Host: your-license-server.com
+Content-Type: application/json
+
+{
+  <span class="str">"license_key"</span>: <span class="str">"XXXX-XXXX-XXXX-XXXX"</span>,
+  <span class="str">"machine_fingerprint"</span>: <span class="str">"a1b2c3d4..."</span>,
+  <span class="str">"plugin_id"</span>: <span class="str">"com.yourname.app"</span>
+}
+            </div>
+
+            <div class="code-label">Response (valid)</div>
+            <div class="code-block">
+{
+  <span class="str">"valid"</span>: <span class="kw">true</span>,
+  <span class="str">"status"</span>: <span class="str">"active"</span>,
+  <span class="str">"expires_at"</span>: <span class="str">"2027-04-03T00:00:00Z"</span>,
+  <span class="str">"machine_bound"</span>: <span class="kw">true</span>
+}
+            </div>
+
+            <p>Compute the machine fingerprint on the client side (as shown in the Electron example above), send it with the license key, and cache the server's response locally. The server handles key validation, machine binding enforcement, and activation counting. Your app just needs to make one HTTP call and store the result.</p>
+
+            <h2>Offline validation and caching.</h2>
+
+            <p>Users will not always have internet access when they launch your application. The standard pattern is to cache the last successful validation response on disk, signed with an HMAC key that you embed in your binary. On subsequent launches, if the server is unreachable, the app checks the local cache. If the cache is less than 30 days old and the HMAC signature is valid, the app proceeds normally.</p>
+
+            <p>The Archergate SDK handles this automatically for C, C++, and Rust apps. For REST API integrations, you implement caching on your side. The important properties: the cache file must be signed (so users cannot edit it), it must include the machine fingerprint (so users cannot copy it between machines), and it must include a timestamp (so it expires).</p>
+
+            <h2>Server deployment.</h2>
+
+            <p>The Archergate license server is a single Rust binary. It uses SQLite for storage, so there is no separate database to manage. Deploy it on a $5/month VPS, a Docker container, a Fly.io instance, or any server that can listen on a port. Generate license keys through the admin API, wire your payment system (Stripe webhook, Gumroad ping, manual CSV) to create keys on purchase, and your infrastructure is complete.</p>
+
+        </article>
+
+        <div class="cta">
+            <h2>Add licensing in thirty minutes.</h2>
+            <p>Static library for C/C++/Rust. REST API for everything else. MIT licensed.</p>
+            <a class="btn" href="https://archergate.io/sdk">Download the SDK</a>
+        </div>
+
+        <div class="related">
+            <span class="label">Related</span>
+            <a href="https://archergate.io/how-to-protect-vst-plugin">How to Protect Your VST Plugin from Piracy</a>
+            <a href="https://archergate.io/machine-bound-licensing-explained">How Machine-Bound Licensing Works</a>
+            <a href="https://archergate.io/archergate-vs-keygen">Archergate vs Keygen: Comparison</a>
+        </div>
+
+        <footer>
+            <div class="brand">Archergate</div>
+            <div class="meta">
+                <a href="https://archergate.io">archergate.io</a> | 447 Sutter St, Ste 506 1461, San Francisco CA 94108
+            </div>
+        </footer>
+
+    </div>
+</body>
+</html>
