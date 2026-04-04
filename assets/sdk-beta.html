@@ -3,670 +3,551 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archergate — License SDK Beta</title>
-    <meta name="description" content="Machine-bound software licensing for indie developers. Protect desktop apps, creative tools, game assets, and plugins. Free and open source.">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Archergate License SDK</title>
+    <meta name="description" content="Copy protection that ships with your binary. Machine-bound licensing for indie software developers.">
     <style>
-        :root {
-            --bg: #08080C;
-            --text: #DEE1E8;
-            --text2: #807E78;
-            --text3: #6A6862;
-            --teal: #6A9ABF;
-            --border: rgba(255,255,255,0.06);
-            --serif: "DM Serif Display", Georgia, serif;
-            --body: "Instrument Serif", Georgia, serif;
-            --mono: "IBM Plex Mono", monospace;
-            --sans: "Space Grotesk", sans-serif;
-        }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: var(--body);
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
+            font-family: Georgia, 'Times New Roman', serif;
+            background: #F5F3EF;
+            color: #222;
+            line-height: 1.7;
             -webkit-font-smoothing: antialiased;
         }
 
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
+        .wrap {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
-        canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        .content { position: relative; z-index: 1; }
-
-        a { color: var(--teal); text-decoration: none; transition: opacity 0.3s; }
-        a:hover { opacity: 0.8; }
-
-        /* Back nav */
-        .back-nav {
-            padding: 24px 64px;
-            font-family: var(--mono);
-            font-size: 0.85rem;
+        /* Header */
+        header {
+            padding: 48px 0 40px;
+            border-bottom: 1px solid #D4D0C8;
         }
-        .back-nav a { color: var(--text2); border-bottom: 1px solid transparent; }
-        .back-nav a:hover { color: var(--teal); border-bottom-color: var(--teal); }
-
-        /* Hero — two column */
-        .hero-split {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 70vh;
-            border-top: 1px solid var(--border);
+        header .brand {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            letter-spacing: 0.15em;
+            color: #222;
         }
-
-        .hero-left {
-            padding: 80px 64px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        header nav {
+            float: right;
+            margin-top: 2px;
         }
-
-        .hero-left .eyebrow {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text3);
-            margin-bottom: 24px;
+        header nav a {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #888;
+            text-decoration: none;
+            margin-left: 24px;
         }
+        header nav a:hover { color: #222; }
 
-        .hero-left h1 {
-            font-family: var(--serif);
-            font-size: clamp(2.2rem, 4vw, 3.2rem);
-            font-weight: 400;
-            line-height: 1.15;
-            margin-bottom: 24px;
+        /* Hero */
+        .hero {
+            padding: 72px 0 64px;
+            border-bottom: 1px solid #D4D0C8;
         }
-
-        .hero-left h1 em {
-            font-style: italic;
-            background: linear-gradient(135deg, var(--teal), var(--text));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-left p {
-            color: var(--text2);
-            font-size: 1.1rem;
-            max-width: 440px;
-            line-height: 1.7;
-        }
-
-        .beta-badge {
+        .badge {
             display: inline-block;
-            font-family: var(--mono);
-            font-size: 0.7rem;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--bg);
-            background: var(--teal);
-            padding: 4px 10px;
-            border-radius: 3px;
-            margin-bottom: 20px;
+            color: #F5F3EF;
+            background: #222;
+            padding: 5px 12px;
+            border-radius: 2px;
+            margin-bottom: 32px;
         }
-
-        /* Form */
-        .hero-right {
-            padding: 80px 64px;
-            border-left: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .sdk-form { max-width: 400px; }
-
-        .sdk-form input, .sdk-form select {
-            width: 100%;
-            padding: 14px 16px;
-            margin-bottom: 12px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            color: var(--text);
-            font-family: var(--mono);
-            font-size: 0.88rem;
-            outline: none;
-            transition: border-color 0.3s;
-            -webkit-appearance: none;
-        }
-
-        .sdk-form input::placeholder { color: var(--text3); }
-        .sdk-form input:focus, .sdk-form select:focus { border-color: var(--teal); }
-
-        .sdk-form select {
-            color: var(--text3);
-            cursor: pointer;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%236A6862'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-        }
-        .sdk-form select.selected { color: var(--text); }
-
-        .sdk-form button {
-            width: 100%;
-            padding: 14px;
-            margin-top: 4px;
-            background: var(--teal);
-            color: var(--bg);
-            border: none;
-            border-radius: 4px;
-            font-family: var(--mono);
-            font-size: 0.88rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-        .sdk-form button:hover { opacity: 0.85; }
-        .sdk-form button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .form-note {
-            font-family: var(--mono);
-            font-size: 0.72rem;
-            color: var(--text3);
-            margin-top: 14px;
-            line-height: 1.5;
-        }
-
-        .form-success {
-            display: none;
-            padding: 24px;
-            border: 1px solid rgba(106,154,191,0.3);
-            border-radius: 4px;
-            background: rgba(106,154,191,0.05);
-        }
-        .form-success h3 {
-            font-family: var(--serif);
-            font-size: 1.3rem;
-            font-weight: 400;
-            margin-bottom: 10px;
-        }
-        .form-success p {
-            color: var(--text2);
-            font-size: 0.95rem;
-        }
-
-        /* Stack section */
-        .stack-section {
-            padding: 80px 64px;
-            border-top: 1px solid var(--border);
-        }
-
-        .stack-eyebrow {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text3);
-            display: block;
-            margin-bottom: 20px;
-        }
-
-        .stack-title {
-            font-family: var(--serif);
-            font-size: 2.2rem;
-            font-weight: 400;
-            margin-bottom: 48px;
-        }
-        .stack-title em {
+        .hero h1 {
+            font-family: Georgia, serif;
+            font-size: 44px;
+            font-weight: normal;
             font-style: italic;
-            background: linear-gradient(135deg, var(--teal), var(--text));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            line-height: 1.2;
+            color: #222;
+            margin-bottom: 28px;
+        }
+        .hero p {
+            font-size: 18px;
+            color: #555;
+            line-height: 1.8;
+            max-width: 540px;
         }
 
-        .stack-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
+        /* Downloads */
+        .downloads {
+            padding: 48px 0;
+            border-bottom: 1px solid #D4D0C8;
         }
-
-        .stack-item-title {
-            font-family: var(--serif);
-            font-size: 1.15rem;
-            font-weight: 400;
-            margin-bottom: 8px;
-        }
-
-        .stack-item-text {
-            color: var(--text3);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* Code section */
-        .code-section {
-            padding: 80px 64px;
-            border-top: 1px solid var(--border);
-        }
-
-        .code-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 24px;
-            margin-top: 40px;
-        }
-
-        .code-card-label {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            color: var(--text3);
+        .section-label {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 10px;
+            color: #888;
+            margin-bottom: 24px;
+            display: block;
         }
-
-        .code-card {
-            background: rgba(255,255,255,0.025);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 20px;
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            color: var(--text2);
-            line-height: 1.6;
-            overflow-x: auto;
-        }
-
-        .code-card .kw { color: var(--teal); }
-        .code-card .str { color: #98C379; }
-
-        /* Built for row */
-        .built-for {
-            padding: 40px 64px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 32px;
-            flex-wrap: wrap;
-        }
-
-        .built-for .label {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text3);
-        }
-
-        .built-for .tags {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .built-for .tag {
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            color: var(--text2);
-            padding: 6px 14px;
-            border: 1px solid var(--border);
-            border-radius: 3px;
-        }
-
-        /* Download rows */
         .dl-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+            border-bottom: 1px solid #E8E5DF;
             text-decoration: none;
-            transition: opacity 0.2s;
+            color: #222;
+            transition: color 0.2s;
         }
-        .dl-row:first-of-type { border-top: 1px solid var(--border); }
-        .dl-row:hover { opacity: 0.7; }
+        .dl-row:first-of-type { border-top: 1px solid #E8E5DF; }
+        .dl-row:hover { color: #888; }
         .dl-platform {
-            font-family: var(--mono);
-            font-size: 0.88rem;
-            color: var(--text);
-            font-weight: 500;
+            font-family: Georgia, serif;
+            font-size: 17px;
         }
         .dl-detail {
-            font-family: var(--mono);
-            font-size: 0.78rem;
-            color: var(--text3);
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #888;
+        }
+        .cargo-line {
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #555;
+        }
+        .cargo-line code {
+            background: #222;
+            color: #F5F3EF;
+            padding: 8px 16px;
+            border-radius: 3px;
+            margin-left: 8px;
+            font-size: 13px;
+        }
+
+        /* What it is */
+        .what {
+            padding: 56px 0;
+            border-bottom: 1px solid #D4D0C8;
+        }
+        .what h2 {
+            font-family: Georgia, serif;
+            font-size: 32px;
+            font-weight: normal;
+            font-style: italic;
+            margin-bottom: 24px;
+            line-height: 1.3;
+        }
+        .what p {
+            font-size: 17px;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        .what p:last-child { margin-bottom: 0; }
+
+        /* Code */
+        .code-section {
+            padding: 56px 0;
+            border-bottom: 1px solid #D4D0C8;
+        }
+        .code-section h2 {
+            font-family: Georgia, serif;
+            font-size: 28px;
+            font-weight: normal;
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+        .code-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 0;
+        }
+        .code-tab {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            padding: 10px 20px;
+            background: #E8E5DF;
+            color: #888;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px 3px 0 0;
+        }
+        .code-tab.active {
+            background: #222;
+            color: #F5F3EF;
+        }
+        .code-block {
+            background: #222;
+            border-radius: 0 3px 3px 3px;
+            padding: 28px 28px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #DEE1E8;
+            overflow-x: auto;
+            display: none;
+        }
+        .code-block.active { display: block; }
+        .code-block .kw { color: #6A9ABF; }
+        .code-block .str { color: #98C379; }
+
+        /* Works with */
+        .compat {
+            padding: 48px 0;
+            border-bottom: 1px solid #D4D0C8;
+            text-align: center;
+        }
+        .compat-list {
+            font-family: Georgia, serif;
+            font-size: 16px;
+            color: #888;
+            line-height: 2.2;
+        }
+
+        /* How it works */
+        .steps {
+            padding: 56px 0;
+            border-bottom: 1px solid #D4D0C8;
+        }
+        .steps h2 {
+            font-family: Georgia, serif;
+            font-size: 28px;
+            font-weight: normal;
+            font-style: italic;
+            margin-bottom: 36px;
+        }
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        .step:last-child { margin-bottom: 0; }
+        .step-num {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #888;
+            flex-shrink: 0;
+            padding-top: 2px;
+        }
+        .step-body h3 {
+            font-family: Georgia, serif;
+            font-size: 18px;
+            font-weight: normal;
+            margin-bottom: 4px;
+        }
+        .step-body p {
+            font-size: 15px;
+            color: #888;
+            line-height: 1.7;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 56px 0;
+            border-bottom: 1px solid #D4D0C8;
+            text-align: center;
+        }
+        .pricing h2 {
+            font-family: Georgia, serif;
+            font-size: 28px;
+            font-weight: normal;
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+        .price-row {
+            font-size: 17px;
+            line-height: 2.4;
+        }
+        .price-row strong {
+            font-weight: bold;
+        }
+        .price-row .amt {
+            color: #888;
         }
 
         /* FAQ */
-        .faq-section {
-            padding: 80px 64px;
-            border-top: 1px solid var(--border);
+        .faq {
+            padding: 56px 0;
+            border-bottom: 1px solid #D4D0C8;
         }
-
-        .faq-title {
-            font-family: var(--serif);
-            font-size: 2rem;
-            font-weight: 400;
-            margin-bottom: 48px;
+        .faq h2 {
+            font-family: Georgia, serif;
+            font-size: 28px;
+            font-weight: normal;
+            font-style: italic;
+            margin-bottom: 36px;
         }
-
-        .faq-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px 60px;
+        .faq-item {
+            margin-bottom: 28px;
         }
-
+        .faq-item:last-child { margin-bottom: 0; }
         .faq-item h4 {
-            font-family: var(--mono);
-            font-size: 0.85rem;
-            color: var(--text);
-            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            letter-spacing: 0.03em;
+            margin-bottom: 6px;
+            color: #222;
+        }
+        .faq-item p {
+            font-size: 16px;
+            color: #888;
+            line-height: 1.7;
         }
 
-        .faq-item p {
-            color: var(--text3);
-            font-size: 0.95rem;
-            line-height: 1.6;
+        /* Email signup */
+        .signup {
+            padding: 56px 0;
+            border-bottom: 1px solid #D4D0C8;
+            text-align: center;
+        }
+        .signup p {
+            font-size: 17px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .signup-form {
+            display: flex;
+            gap: 8px;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .signup-form input {
+            flex: 1;
+            padding: 14px 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 1px solid #D4D0C8;
+            border-radius: 3px;
+            background: #fff;
+            color: #222;
+            outline: none;
+        }
+        .signup-form input:focus { border-color: #222; }
+        .signup-form input::placeholder { color: #bbb; }
+        .signup-form button {
+            padding: 14px 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            letter-spacing: 0.05em;
+            background: #222;
+            color: #F5F3EF;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .signup-form button:hover { background: #444; }
+        .signup-note {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 12px;
+        }
+        .signup-success {
+            display: none;
+            font-family: Georgia, serif;
+            font-size: 18px;
+            font-style: italic;
+            color: #222;
         }
 
         /* Footer */
-        .foot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 64px;
-            border-top: 1px solid var(--border);
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            color: var(--text3);
+        footer {
+            padding: 40px 0 64px;
         }
-
-        .foot-logo {
-            font-family: var(--serif);
-            font-size: 1rem;
-            color: var(--text);
+        footer .brand {
+            font-family: Georgia, serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 6px;
         }
-        .foot-logo em { color: var(--teal); }
-
-        .foot nav a {
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            color: var(--text3);
-            margin-left: 24px;
+        footer .meta {
+            font-family: Georgia, serif;
+            font-size: 13px;
+            color: #888;
         }
-        .foot nav a:hover { color: var(--teal); }
+        footer .meta a {
+            color: #888;
+            text-decoration: none;
+        }
+        footer .meta a:hover { color: #222; }
 
-        /* Responsive */
-        @media (max-width: 900px) {
-            .hero-split { grid-template-columns: 1fr; }
-            .hero-right { border-left: none; border-top: 1px solid var(--border); padding: 48px 24px; }
-            .hero-left { padding: 48px 24px; }
-            .stack-section, .code-section, .faq-section { padding: 48px 24px; }
-            .stack-grid, .code-grid { grid-template-columns: 1fr; }
-            .faq-grid { grid-template-columns: 1fr; }
-            .built-for { padding: 24px; flex-direction: column; align-items: flex-start; }
-            .foot { flex-direction: column; gap: 16px; text-align: center; padding: 24px; }
-            .foot nav a { margin: 0 12px; }
-            .back-nav { padding: 24px; }
+        /* Mobile */
+        @media (max-width: 680px) {
+            .wrap { padding: 0 20px; }
+            header nav { float: none; margin-top: 12px; }
+            header nav a { margin-left: 0; margin-right: 20px; }
+            .hero { padding: 48px 0; }
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .signup-form { flex-direction: column; }
+            .code-tabs { flex-wrap: wrap; }
         }
     </style>
 </head>
 <body>
-    <canvas id="field"></canvas>
+    <div class="wrap">
 
-    <div class="content">
-        <div class="back-nav">
-            <a href="https://archergate.io">&larr; Archergate</a>
-        </div>
+        <header>
+            <span class="brand">A R C H E R G A T E</span>
+            <nav>
+                <a href="https://archergate.io">Home</a>
+                <a href="https://github.com/lailaarcher/archergate">Source</a>
+                <a href="https://docs.rs/archergate-license">Docs</a>
+            </nav>
+        </header>
 
-        <!-- Hero -->
-        <section class="hero-split">
-            <div class="hero-left">
-                <span class="beta-badge">Open Beta</span>
-                <span class="eyebrow">License SDK</span>
-                <h1>Copy protection that <em>ships with your binary.</em></h1>
-                <p>Archergate is a licensing library. Drop it into your C, C++, or Rust project. It locks each license key to the hardware it was activated on. Users who buy your software can run it. Users who didn't, can't. Works offline. Self-hostable. MIT licensed.</p>
-            </div>
-            <div class="hero-right">
-                <!-- Direct downloads (no gate) -->
-                <div class="download-section" id="download-section">
-                    <div style="font-family:var(--mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:16px;">Download</div>
+        <section class="hero">
+            <span class="badge">Open Beta</span>
+            <h1>Copy protection that ships with your binary.</h1>
+            <p>Archergate is a licensing library. Drop it into your C, C++, or Rust project. It locks each license key to the machine it was activated on. Works offline for 30 days. Self-hostable. MIT licensed.</p>
+        </section>
 
-                    <a href="https://github.com/lailaarcher/archergate/releases/latest/download/archergate-license-windows-x64.tar.gz" class="dl-row" onclick="trackDL('windows')">
-                        <span class="dl-platform">Windows</span>
-                        <span class="dl-detail">MSVC x64 .tar.gz</span>
-                    </a>
-                    <a href="https://github.com/lailaarcher/archergate/releases/latest/download/archergate-license-macos-universal.tar.gz" class="dl-row" onclick="trackDL('macos')">
-                        <span class="dl-platform">macOS</span>
-                        <span class="dl-detail">Intel + Apple Silicon .tar.gz</span>
-                    </a>
-                    <a href="https://github.com/lailaarcher/archergate/releases/latest/download/archergate-license-linux-x64.tar.gz" class="dl-row" onclick="trackDL('linux')">
-                        <span class="dl-platform">Linux</span>
-                        <span class="dl-detail">x86_64 .tar.gz</span>
-                    </a>
-                    <a href="https://crates.io/crates/archergate-license" class="dl-row" onclick="trackDL('rust')">
-                        <span class="dl-platform">Rust</span>
-                        <span class="dl-detail">cargo add archergate-license</span>
-                    </a>
-                    <a href="https://github.com/lailaarcher/archergate" class="dl-row" onclick="trackDL('source')">
-                        <span class="dl-platform">Source</span>
-                        <span class="dl-detail">github.com/lailaarcher/archergate</span>
-                    </a>
-
-                    <div style="font-family:var(--mono);font-size:0.72rem;color:var(--text3);margin-top:16px;line-height:1.5;">
-                        Each archive contains the static library, C header, and README.
-                    </div>
-
-                    <div style="border-top:1px solid var(--border);margin:24px 0;padding-top:24px;">
-                        <div style="font-family:var(--mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:12px;">Or get the full guide by email</div>
-                        <form id="sdk-form" onsubmit="return submitSDK(event)" style="display:flex;gap:8px;">
-                            <input type="email" id="sdk-email" placeholder="you@email.com" required style="flex:1;padding:12px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--mono);font-size:0.85rem;outline:none;">
-                            <button type="submit" id="sdk-btn" style="padding:12px 20px;background:var(--teal);color:var(--bg);border:none;border-radius:4px;font-family:var(--mono);font-size:0.85rem;font-weight:500;cursor:pointer;white-space:nowrap;">Send guide</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="form-success" id="form-success" style="display:none;">
-                    <h3>Check your inbox.</h3>
-                    <p>Integration guide and download links sent.</p>
-                </div>
+        <section class="downloads">
+            <span class="section-label">Download</span>
+            <a href="https://github.com/lailaarcher/archergate/releases/latest/download/archergate-license-windows-x64.tar.gz" class="dl-row" onclick="trackDL('windows')">
+                <span class="dl-platform">Windows</span>
+                <span class="dl-detail">MSVC x64 .tar.gz</span>
+            </a>
+            <a href="https://github.com/lailaarcher/archergate/releases/latest/download/archergate-license-macos-universal.tar.gz" class="dl-row" onclick="trackDL('macos')">
+                <span class="dl-platform">macOS</span>
+                <span class="dl-detail">Intel + Apple Silicon .tar.gz</span>
+            </a>
+            <a href="https://github.com/lailaarcher/archergate/releases/latest/download/archergate-license-linux-x64.tar.gz" class="dl-row" onclick="trackDL('linux')">
+                <span class="dl-platform">Linux</span>
+                <span class="dl-detail">x86_64 .tar.gz</span>
+            </a>
+            <div class="cargo-line">
+                Rust: <code>cargo add archergate-license</code>
             </div>
         </section>
 
-        <!-- Built for -->
-        <div class="built-for">
-            <span class="label">Built for</span>
-            <div class="tags">
-                <span class="tag">DAW Plugins</span>
-                <span class="tag">Unity Assets</span>
-                <span class="tag">Blender Addons</span>
-                <span class="tag">Desktop Apps</span>
-                <span class="tag">Creative Tools</span>
-                <span class="tag">Game Mods</span>
-            </div>
-        </div>
-
-        <!-- How it works -->
-        <section class="stack-section">
-            <span class="stack-eyebrow">How it works</span>
-            <h2 class="stack-title">Your app calls the SDK at startup. <em>That's it.</em></h2>
-            <div class="stack-grid">
-                <div class="stack-item">
-                    <h3 class="stack-item-title">1. User buys a key</h3>
-                    <p class="stack-item-text">You generate license keys through the server. Sell them however you want: Gumroad, Stripe, your own store.</p>
-                </div>
-                <div class="stack-item">
-                    <h3 class="stack-item-title">2. App validates on launch</h3>
-                    <p class="stack-item-text">Three lines in your startup code. The SDK checks the key against the server and locks it to this machine's hardware.</p>
-                </div>
-                <div class="stack-item">
-                    <h3 class="stack-item-title">3. Works offline for 30 days</h3>
-                    <p class="stack-item-text">After one successful check, a signed cache lets the app run without internet. Good for studios, live rigs, air-gapped machines.</p>
-                </div>
-            </div>
+        <section class="what">
+            <h2>What this does.</h2>
+            <p>You sell software. Plugins, desktop apps, game tools, creative addons. Right now, anyone with your binary can use it. Archergate ties each license key to the hardware it was activated on. If someone copies the binary to another machine, it won't run without a valid key for that machine.</p>
+            <p>The SDK handles machine fingerprinting, key validation, offline caching, trial periods, and tamper detection. You handle selling and distributing keys however you already do: Gumroad, Stripe, your own store, anything.</p>
         </section>
 
-        <!-- Code -->
         <section class="code-section">
-            <span class="stack-eyebrow">Integration</span>
-            <h2 class="stack-title">Pick your language. <em>Add three lines.</em></h2>
-            <div class="code-grid">
-                <div>
-                    <div class="code-card-label">Rust</div>
-                    <div class="code-card">
-<span class="kw">use</span> archergate_license::LicenseClient;
-
-<span class="kw">let</span> client = LicenseClient::new(
-    <span class="str">"your-api-key"</span>,
-    <span class="str">"com.you.app"</span>,
-);
-client.validate(<span class="str">"XXXX-XXXX"</span>)?;
-                    </div>
-                </div>
-                <div>
-                    <div class="code-card-label">C / C++</div>
-                    <div class="code-card">
+            <h2>Integration.</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" onclick="showTab('c')">C / C++</button>
+                <button class="code-tab" onclick="showTab('rust')">Rust</button>
+                <button class="code-tab" onclick="showTab('rest')">REST</button>
+            </div>
+            <div class="code-block active" id="tab-c">
 <span class="kw">#include</span> <span class="str">"archergate_license.h"</span>
 
-AgLicenseClient* c = ag_license_new(
-    <span class="str">"your-api-key"</span>,
-    <span class="str">"com.you.app"</span>
-);
-ag_license_validate(c, key);
-ag_license_free(c);
-                    </div>
-                </div>
-                <div>
-                    <div class="code-card-label">REST API (any language)</div>
-                    <div class="code-card">
+AgLicenseClient* c = ag_license_new(<span class="str">"key"</span>, <span class="str">"com.you.app"</span>);
+ag_license_validate(c, license_key);
+            </div>
+            <div class="code-block" id="tab-rust">
+<span class="kw">use</span> archergate_license::LicenseClient;
+
+<span class="kw">let</span> client = LicenseClient::new(<span class="str">"key"</span>, <span class="str">"com.you.app"</span>);
+client.validate(<span class="str">"XXXX-XXXX"</span>)?;
+            </div>
+            <div class="code-block" id="tab-rest">
 POST /validate
 {
-  <span class="str">"license_key"</span>: <span class="str">"XXXX"</span>,
+  <span class="str">"license_key"</span>: <span class="str">"XXXX-XXXX"</span>,
   <span class="str">"machine_fingerprint"</span>: <span class="str">"..."</span>,
   <span class="str">"plugin_id"</span>: <span class="str">"com.you.app"</span>
 }
 
-<span class="kw">→</span> { <span class="str">"valid"</span>: <span class="kw">true</span> }
-                    </div>
+<span class="kw">200</span> { <span class="str">"valid"</span>: <span class="kw">true</span> }
+            </div>
+        </section>
+
+        <section class="compat">
+            <span class="section-label">Works with</span>
+            <div class="compat-list">
+                VST3 / AU / AAX / CLAP / JUCE<br>
+                Unity / Unreal / Blender / Revit / AutoCAD<br>
+                Electron / Tauri / any C-linkable binary
+            </div>
+        </section>
+
+        <section class="steps">
+            <h2>How it works.</h2>
+            <div class="step">
+                <span class="step-num">01</span>
+                <div class="step-body">
+                    <h3>You generate license keys through the server.</h3>
+                    <p>Sell them however you want. The server is yours to run.</p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">02</span>
+                <div class="step-body">
+                    <h3>Your app calls the SDK at startup.</h3>
+                    <p>Three lines. The SDK checks the key against your server and locks it to this machine.</p>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">03</span>
+                <div class="step-body">
+                    <h3>Validated. Works offline for 30 days.</h3>
+                    <p>A signed cache lets the app run without internet. Good for studios, live rigs, air-gapped setups.</p>
                 </div>
             </div>
         </section>
 
-        <!-- FAQ -->
-        <section class="faq-section">
-            <h2 class="faq-title">Common questions</h2>
-            <div class="faq-grid">
-                <div class="faq-item">
-                    <h4>What does this replace?</h4>
-                    <p>Custom license code you'd write yourself (weeks of work), or services like Keygen, Gumroad's license API, or iLok. This is a drop-in static library, not a platform.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>Where does the server run?</h4>
-                    <p>Wherever you want. The reference server is Rust + SQLite. Deploy on a $5 VPS, a Docker container, or your existing infrastructure. Archergate hosted option coming later.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>What data touches your servers?</h4>
-                    <p>Nothing, if you self-host. The SDK talks to YOUR server. License key, machine fingerprint, activation timestamp. No analytics, no telemetry.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>What if Archergate disappears?</h4>
-                    <p>The SDK is MIT licensed. Fork it, vendor it, rewrite the server. Your shipping product depends on your copy of the code, not ours.</p>
-                </div>
+        <section class="pricing">
+            <h2>Pricing.</h2>
+            <div class="price-row">
+                <strong>SDK</strong> <span class="amt">free forever</span><br>
+                <strong>Self-host</strong> <span class="amt">free forever</span><br>
+                <strong>We host it</strong> <span class="amt">$29/month (coming soon)</span>
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="foot">
-            <span>&copy; 2026 Archergate San Francisco, California</span>
-            <nav>
-                <a href="https://github.com/lailaarcher/archergate">GitHub</a>
-                <a href="https://crates.io/crates/archergate-license">crates.io</a>
-                <a href="https://docs.rs/archergate-license">Docs</a>
-                <a href="mailto:hello@archergate.io">Contact</a>
-            </nav>
-            <span class="foot-logo">Archer<em>gate</em></span>
+        <section class="faq">
+            <h2>Questions.</h2>
+            <div class="faq-item">
+                <h4>What does this replace?</h4>
+                <p>Custom license code you would write yourself, or services like Keygen, iLok, or Gumroad's license API. This is a static library, not a platform.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Where does the server run?</h4>
+                <p>Wherever you want. The reference server is Rust + SQLite. A $5 VPS, a Docker container, your existing infrastructure. Modify it however you need.</p>
+            </div>
+            <div class="faq-item">
+                <h4>What data touches your servers?</h4>
+                <p>Nothing, if you self-host. The SDK talks to your server. License key, machine fingerprint, activation date. No analytics, no telemetry.</p>
+            </div>
+            <div class="faq-item">
+                <h4>What if Archergate disappears?</h4>
+                <p>The SDK is MIT licensed. Fork it, vendor it, rewrite the server. Your product depends on your copy of the code, not ours.</p>
+            </div>
+        </section>
+
+        <section class="signup">
+            <p>Get the integration guide by email.</p>
+            <form class="signup-form" id="sdk-form" onsubmit="return submitSDK(event)">
+                <input type="email" id="sdk-email" placeholder="you@email.com" required>
+                <button type="submit" id="sdk-btn">Send</button>
+            </form>
+            <div class="signup-note">Download links, code examples, and setup walkthrough.</div>
+            <div class="signup-success" id="signup-success">Check your inbox.</div>
+        </section>
+
+        <footer>
+            <div class="brand">Archergate</div>
+            <div class="meta">
+                <a href="https://archergate.io">archergate.io</a> | 447 Sutter St, Ste 506 1461, San Francisco CA 94108
+            </div>
         </footer>
+
     </div>
 
     <script>
-        // Archergate animated background
-        const canvas = document.getElementById('field');
-        const ctx = canvas.getContext('2d');
-        let W, H, mouse = {x: -1000, y: -1000}, stars = [], nodes = [], time = 0;
-
-        function resize() {
-            const dpr = Math.min(devicePixelRatio || 1, 2);
-            W = innerWidth; H = innerHeight;
-            canvas.width = W * dpr; canvas.height = H * dpr;
-            ctx.scale(dpr, dpr);
-        }
-
-        function init() {
-            stars = []; nodes = [];
-            const count = Math.floor((W * H) / 16000);
-            for (let i = 0; i < count; i++) {
-                stars.push({
-                    x: Math.random() * W, y: Math.random() * H,
-                    r: Math.random() * 1.2 + 0.3,
-                    phase: Math.random() * Math.PI * 2,
-                    speed: 0.005 + Math.random() * 0.01,
-                    dx: (Math.random() - 0.5) * 0.08,
-                    dy: (Math.random() - 0.5) * 0.08
-                });
-            }
-            for (let i = 0; i < 5; i++) {
-                nodes.push({
-                    x: Math.random() * W, y: Math.random() * H,
-                    r: 1.5 + Math.random() * 2,
-                    phase: Math.random() * Math.PI * 2,
-                    freq: 0.003 + Math.random() * 0.004,
-                    dx: (Math.random() - 0.5) * 0.2,
-                    dy: (Math.random() - 0.5) * 0.2
-                });
-            }
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, W, H);
-            time++;
-
-            for (const s of stars) {
-                s.x += s.dx; s.y += s.dy;
-                s.phase += s.speed;
-                if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
-                if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
-
-                const dist = Math.hypot(s.x - mouse.x, s.y - mouse.y);
-                const glow = dist < 180 ? (1 - dist / 180) * 0.35 : 0;
-                const alpha = 0.12 + Math.sin(s.phase) * 0.07 + glow;
-
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(106,154,191,${alpha})`;
-                ctx.fill();
-            }
-
-            for (const n of nodes) {
-                n.x += n.dx; n.y += n.dy;
-                n.phase += n.freq;
-                if (n.x < 0 || n.x > W) n.dx *= -1;
-                if (n.y < 0 || n.y > H) n.dy *= -1;
-
-                const pulse = 0.15 + Math.sin(n.phase) * 0.08;
-                ctx.beginPath();
-                ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(106,154,191,${pulse})`;
-                ctx.fill();
-            }
-
-            requestAnimationFrame(draw);
-        }
-
-        resize(); init(); draw();
-        addEventListener('resize', () => { resize(); init(); });
-        document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-
-        // Download tracking
         function trackDL(platform) {
             try {
                 fetch('/api/track', {
@@ -677,28 +558,33 @@ POST /validate
             } catch(e) {}
         }
 
-        // Email guide form
+        function showTab(lang) {
+            document.querySelectorAll('.code-block').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + lang).classList.add('active');
+            event.target.classList.add('active');
+        }
+
         async function submitSDK(e) {
             e.preventDefault();
-            const btn = document.getElementById('sdk-btn');
+            var btn = document.getElementById('sdk-btn');
             btn.disabled = true;
             btn.textContent = 'Sending...';
 
-            const data = {
-                email: document.getElementById('sdk-email').value,
-                source: 'sdk-beta'
-            };
-
             try {
-                const resp = await fetch('/api/sdk-beta', {
+                var resp = await fetch('/api/sdk-beta', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify({
+                        email: document.getElementById('sdk-email').value,
+                        source: 'sdk-beta'
+                    })
                 });
 
                 if (resp.ok) {
-                    document.getElementById('download-section').style.display = 'none';
-                    document.getElementById('form-success').style.display = 'block';
+                    document.getElementById('sdk-form').style.display = 'none';
+                    document.querySelector('.signup-note').style.display = 'none';
+                    document.getElementById('signup-success').style.display = 'block';
                     try { fetch('/api/track', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: 'email_signup', ts: Date.now() }) }).catch(function(){}); } catch(e) {}
                 } else {
                     btn.textContent = 'Try again';
@@ -708,7 +594,6 @@ POST /validate
                 btn.textContent = 'Try again';
                 btn.disabled = false;
             }
-
             return false;
         }
     </script>
