@@ -5,14 +5,13 @@
 //!   archergate-license-server create-key --email dev@example.com
 //!   archergate-license-server create-license --plugin com.dev.synth --max-machines 3
 
-mod db;
-mod handlers;
+use archergate_license_server::db;
+use archergate_license_server::handlers;
 
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use axum::routing::{get, post};
-use axum::Router;
+
 use clap::{Parser, Subcommand};
 use tower_http::cors::CorsLayer;
 use tower_http::trace::TraceLayer;
@@ -93,14 +92,10 @@ async fn main() {
             let database = db::Db::open(&db_path).expect("Failed to open database");
             let state: handlers::AppState = Arc::new(database);
 
-            let app = Router::new()
-                .route("/validate", post(handlers::validate))
-                .route("/activate", post(handlers::activate))
-                .route("/licenses", post(handlers::create_license))
-                .route("/health", get(handlers::health))
+            let app = handlers::build_router(state)
                 .layer(CorsLayer::permissive())
                 .layer(TraceLayer::new_for_http())
-                .with_state(state);
+                .into_make_service();
 
             let addr = format!("0.0.0.0:{port}");
             tracing::info!("Archergate License Server listening on {addr}");
@@ -108,6 +103,7 @@ async fn main() {
 
             let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
             axum::serve(listener, app).await.unwrap();
+            // axum::serve requires IntoMakeService, provided by into_make_service() above
         }
 
         Commands::CreateKey { email, db: db_path } => {

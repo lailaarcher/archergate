@@ -9,6 +9,10 @@ repository = "https://github.com/lailaarcher/archergate"
 homepage = "https://archergate.io/developers"
 documentation = "https://docs.rs/archergate-license-server"
 
+[lib]
+name = "archergate_license_server"
+path = "src/lib.rs"
+
 [[bin]]
 name = "archergate-license-server"
 path = "src/main.rs"
@@ -27,3 +31,10 @@ tower-http = { version = "0.6", features = ["cors", "trace"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 clap = { version = "4", features = ["derive"] }
+
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }
+http-body-util = "0.1"
+hyper = "1"
+archergate-license = { path = "../archergate-license" }
+dirs = "5"

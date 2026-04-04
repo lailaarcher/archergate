@@ -8,7 +8,7 @@ use std::sync::Mutex;
 
 /// Thread-safe database handle.
 pub struct Db {
-    conn: Mutex<Connection>,
+    pub(crate) conn: Mutex<Connection>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -57,7 +57,6 @@ impl Db {
     }
 
     /// Open an in-memory database (for testing).
-    #[cfg(test)]
     pub fn open_memory() -> Result<Self, String> {
         let conn = Connection::open_in_memory().map_err(|e| format!("sqlite: {e}"))?;
         conn.execute_batch("PRAGMA foreign_keys=ON;")
