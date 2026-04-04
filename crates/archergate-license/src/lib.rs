@@ -17,7 +17,7 @@
 //! }
 //! ```
 //!
-//! ## Quick start (C / C++ / JUCE)
+//! ## Quick start (C / C++)
 //!
 //! Link against `archergate_license.lib` (Windows) or `libarchergate_license.a` (macOS/Linux)
 //! and include `archergate_license.h`:
