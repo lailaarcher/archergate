@@ -1,0 +1,45 @@
+# Archergate
+
+> Machine-bound software licensing SDK for indie developers.
+
+Archergate is a static library (Rust, C, C++) that locks software license keys to the hardware they were activated on. Developers drop it into their project, add three lines of code, and their software validates licenses at startup. Works offline for 30 days with a signed cache. MIT licensed. Self-hostable.
+
+## Use cases
+
+- VST/AU/AAX audio plugin copy protection
+- Unity and Unreal asset licensing
+- Blender addon licensing
+- Electron and Tauri desktop app licensing
+- Adobe plugin (Premiere, After Effects, Photoshop) licensing
+- Game mod and tool licensing
+- Any native software that ships as a C-linkable binary
+
+## How it works
+
+1. Developer generates license keys through a self-hosted server (Rust + SQLite)
+2. Developer's app calls the SDK at startup with 3 lines of code
+3. SDK checks the key against the server and locks it to the machine's hardware fingerprint (SHA-256 of CPU identity + OS install ID)
+4. After one online validation, the app works offline for 30 days using an HMAC-signed local cache
+
+## Integration
+
+Rust: cargo add archergate-license
+C/C++: Link the static library and include archergate_license.h
+Any language: REST API (POST /validate)
+
+## Pricing
+
+SDK: Free forever (MIT licensed)
+Self-hosted server: Free forever
+Managed hosting: $29/month (coming soon)
+
+## Links
+
+- Website: https://archergate.io/sdk
+- Source: https://github.com/lailaarcher/archergate
+- Rust crate: https://crates.io/crates/archergate-license
+- Documentation: https://docs.rs/archergate-license
+
+## Comparison
+
+Unlike Keygen ($0.10/validation), iLok (hardware dongle required), or Gumroad's license API (platform lock-in), Archergate is a static library you compile into your binary. No runtime dependency on external services. Self-host the server. MIT licensed. Fork it if we disappear.
